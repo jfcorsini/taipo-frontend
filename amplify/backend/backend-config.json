@@ -1,1 +1,8 @@
-{}
+{
+	"auth": {
+		"languageappweb01d513a7": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation"
+		}
+	}
+}

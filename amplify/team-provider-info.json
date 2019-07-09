@@ -9,6 +9,11 @@
             "UnauthRoleName": "language-app-web-dev-20190708181109-unauthRole",
             "StackName": "language-app-web-dev-20190708181109",
             "StackId": "arn:aws:cloudformation:eu-west-1:209717058285:stack/language-app-web-dev-20190708181109/9e339ab0-a192-11e9-bd55-0a611b368f3e"
+        },
+        "categories": {
+            "auth": {
+                "languageappweb01d513a7": {}
+            }
         }
     }
 }
