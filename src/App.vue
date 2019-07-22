@@ -4,52 +4,17 @@
       <router-link tag="p" to="/">
         <a>Home</a>
       </router-link>
-      <router-link tag="p" to="/profile">
-        <a>Profile</a>
-      </router-link>
       <router-link tag="p" to="/chat">
         <a>Chat</a>
       </router-link>
-      <router-link tag="p" to="/auth" v-if="!signedIn">
-        <a>Sign Up / Sign In</a>
-      </router-link>
     </div>
     <router-view></router-view>
-    <div class="sign-out">
-      <amplify-sign-out v-if="signedIn"></amplify-sign-out>
-    </div>
   </div>
 </template>
 
 <script>
-import { AmplifyEventBus } from "aws-amplify-vue";
-import { Auth } from "aws-amplify";
-
 export default {
-  name: "app",
-  data() {
-    return {
-      signedIn: false
-    };
-  },
-  beforeCreate() {
-    AmplifyEventBus.$on("authState", info => {
-      if (info === "signedIn") {
-        this.signedIn = true;
-        this.$router.push("/profile");
-      }
-      if (info === "signedOut") {
-        this.$router.push("/auth");
-        this.signedIn = false;
-      }
-    });
-
-    Auth.currentAuthenticatedUser()
-      .then(user => {
-        this.signedIn = true;
-      })
-      .catch(() => (this.signedIn = false));
-  }
+  name: "app"
 };
 </script>
 

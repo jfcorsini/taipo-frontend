@@ -1,5 +1,7 @@
 # language-app-web
 
+In order to run this, make sure to create a file on src/config.js based on src/config.js.dist.
+
 ## Project setup
 ```
 npm install
