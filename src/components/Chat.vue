@@ -12,21 +12,36 @@
         </div>
       </template>
     </amplify-connect>
+    <div class="panel-body">
+      <amplify-connect :mutation="createTodoMutation" @done="onCreateFinished">
+        <template slot-scope="{ loading, mutate, errors }">
+          <input v-model="message" placeholder="message" />
+          <button :disabled="loading" @click="mutate">Send message</button>
+        </template>
+      </amplify-connect>
+    </div>
   </div>
 </template>
 
 <script>
 import { components } from "aws-amplify-vue";
 
-const chatId = "chatOne"; // Hardcoded until you can choose the chat name
-const listChatMessagesQuery = `query listMessages {
-  listMessages(input: {chatId: "${chatId}"}) {
+const listChatMessagesQuery = `query listMessages($chatId: String!) {
+  listMessages(input: {chatId: $chatId}) {
     chatId
     message
     sortKey
     messageId
   }
 }`;
+
+const createTodoMutation = `mutation putMessage($chatId: String!, $message: String!) {
+    putMessage(input: { chatId: $chatId, message: $message }) {
+      chatId
+      message
+      sortKey
+    }
+  }`;
 
 export default {
   name: "chat",
@@ -38,7 +53,9 @@ export default {
 
   data() {
     return {
-      hydrated: false
+      chatId: "chatOne",
+      hydrated: false,
+      message: ""
     };
   },
 
@@ -48,7 +65,21 @@ export default {
 
   computed: {
     listChatMessagesQuery() {
-      return this.$Amplify.graphqlOperation(listChatMessagesQuery);
+      return this.$Amplify.graphqlOperation(listChatMessagesQuery, {
+        chatId: this.chatId
+      });
+    },
+    createTodoMutation() {
+      return this.$Amplify.graphqlOperation(createTodoMutation, {
+        chatId: this.chatId,
+        message: this.message
+      });
+    }
+  },
+
+  methods: {
+    onCreateFinished() {
+      console.log("Todo created!");
     }
   }
 };

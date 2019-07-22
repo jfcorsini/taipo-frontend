@@ -3,9 +3,6 @@ import VueRouter from 'vue-router'
 import Amplify, * as AmplifyModules from 'aws-amplify'
 import { AmplifyPlugin } from 'aws-amplify-vue'
 
-// vue-form-generator will make it easy to add and validate a styled form
-import VueFormGenerator from 'vue-form-generator'
-import 'vue-form-generator/dist/vfg-core.css'
 import VueApollo from 'vue-apollo'
 import AWSAppSyncClient from 'aws-appsync'
 
@@ -34,7 +31,6 @@ const appsyncProvider = new VueApollo({
  defaultClient: client
 })
 
-Vue.use(VueFormGenerator)
 Vue.use(VueApollo)
 Vue.config.productionTip = false
 

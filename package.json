@@ -15,7 +15,6 @@
     "graphql-tag": "^2.10.1",
     "vue": "^2.6.10",
     "vue-apollo": "^3.0.0-rc.2",
-    "vue-form-generator": "^2.3.4",
     "vue-router": "^3.0.7"
   },
   "devDependencies": {
