@@ -1,6 +1,10 @@
 <template>
   <div class="home" v-if="hydrated">
-    <amplify-connect :query="listChatMessagesQuery">
+    <amplify-connect
+      :query="listChatMessagesQuery"
+      :subscription="createMessageSubscription"
+      :onSubscriptionMsg="onCreateMessage"
+    >
       <template slot-scope="{loading, data, errors}">
         <div v-if="loading">Loading...</div>
 
@@ -14,7 +18,7 @@
     </amplify-connect>
     <div class="panel-body">
       <amplify-connect :mutation="createTodoMutation" @done="onCreateFinished">
-        <template slot-scope="{ loading, mutate, errors }">
+        <template slot-scope="{ loading, mutate }">
           <input v-model="message" placeholder="message" />
           <button :disabled="loading" @click="mutate">Send message</button>
         </template>
@@ -34,6 +38,15 @@ const listChatMessagesQuery = `query listMessages($chatId: String!) {
     messageId
   }
 }`;
+
+const OnCreateMessageSubscription = `subscription createdMessage {
+    createdMessage {
+      chatId
+      message
+      sortKey
+      messageId
+    }
+  }`;
 
 const createTodoMutation = `mutation putMessage($chatId: String!, $message: String!) {
     putMessage(input: { chatId: $chatId, message: $message }) {
@@ -69,6 +82,9 @@ export default {
         chatId: this.chatId
       });
     },
+    createMessageSubscription() {
+      return this.$Amplify.graphqlOperation(OnCreateMessageSubscription);
+    },
     createTodoMutation() {
       return this.$Amplify.graphqlOperation(createTodoMutation, {
         chatId: this.chatId,
@@ -80,6 +96,11 @@ export default {
   methods: {
     onCreateFinished() {
       console.log("Todo created!");
+    },
+    onCreateMessage(prevData, newData) {
+      const newMessage = newData.createdMessage[0]; // Returns a list at the moment
+      prevData.data.listMessages.push(newMessage);
+      return prevData.data;
     }
   }
 };
