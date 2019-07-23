@@ -17,7 +17,7 @@
       </template>
     </amplify-connect>
     <div class="panel-body">
-      <amplify-connect :mutation="createTodoMutation" @done="onCreateFinished">
+      <amplify-connect :mutation="createMessageMutation" @done="onCreateFinished">
         <template slot-scope="{ loading, mutate }">
           <input v-model="message" placeholder="message" />
           <button :disabled="loading" @click="mutate">Send message</button>
@@ -48,7 +48,7 @@ const OnCreateMessageSubscription = `subscription createdMessage {
     }
   }`;
 
-const createTodoMutation = `mutation putMessage($chatId: String!, $message: String!) {
+const createMessageMutation = `mutation putMessage($chatId: String!, $message: String!) {
     putMessage(input: { chatId: $chatId, message: $message }) {
       chatId
       message
@@ -66,7 +66,6 @@ export default {
 
   data() {
     return {
-      chatId: "chatOne",
       hydrated: false,
       message: ""
     };
@@ -79,15 +78,15 @@ export default {
   computed: {
     listChatMessagesQuery() {
       return this.$Amplify.graphqlOperation(listChatMessagesQuery, {
-        chatId: this.chatId
+        chatId: this.$route.params.chatId
       });
     },
     createMessageSubscription() {
       return this.$Amplify.graphqlOperation(OnCreateMessageSubscription);
     },
-    createTodoMutation() {
-      return this.$Amplify.graphqlOperation(createTodoMutation, {
-        chatId: this.chatId,
+    createMessageMutation() {
+      return this.$Amplify.graphqlOperation(createMessageMutation, {
+        chatId: this.$route.params.chatId,
         message: this.message
       });
     }
@@ -95,10 +94,11 @@ export default {
 
   methods: {
     onCreateFinished() {
-      console.log("Todo created!");
+      console.log("Message created!");
     },
     onCreateMessage(prevData, newData) {
       const newMessage = newData.createdMessage[0]; // Returns a list at the moment
+      console.log("NEW MESSAGE", newMessage);
       prevData.data.listMessages.push(newMessage);
       return prevData.data;
     }

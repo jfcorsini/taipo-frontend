@@ -4,8 +4,8 @@
       <router-link tag="p" to="/">
         <a>Home</a>
       </router-link>
-      <router-link tag="p" to="/chat">
-        <a>Chat</a>
+      <router-link tag="p" to="/chats">
+        <a>Chats</a>
       </router-link>
     </div>
     <router-view></router-view>
