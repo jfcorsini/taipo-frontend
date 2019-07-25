@@ -39,8 +39,8 @@ const listChatMessagesQuery = `query listMessages($chatId: String!) {
   }
 }`;
 
-const OnCreateMessageSubscription = `subscription createdMessage {
-    createdMessage {
+const OnCreateMessageSubscription = `subscription createdMessage($chatId: String!) {
+    createdMessage (chatId: $chatId) {
       chatId
       message
       sortKey
@@ -48,11 +48,12 @@ const OnCreateMessageSubscription = `subscription createdMessage {
     }
   }`;
 
-const createMessageMutation = `mutation putMessage($chatId: String!, $message: String!) {
-    putMessage(input: { chatId: $chatId, message: $message }) {
+const createMessageMutation = `mutation createMessage($chatId: String!, $message: String!) {
+    createMessage(input: { chatId: $chatId, message: $message }) {
       chatId
       message
       sortKey
+      messageId
     }
   }`;
 
@@ -82,7 +83,9 @@ export default {
       });
     },
     createMessageSubscription() {
-      return this.$Amplify.graphqlOperation(OnCreateMessageSubscription);
+      return this.$Amplify.graphqlOperation(OnCreateMessageSubscription, {
+        chatId: this.$route.params.chatId
+      });
     },
     createMessageMutation() {
       return this.$Amplify.graphqlOperation(createMessageMutation, {
@@ -97,8 +100,7 @@ export default {
       console.log("Message created!");
     },
     onCreateMessage(prevData, newData) {
-      const newMessage = newData.createdMessage[0]; // Returns a list at the moment
-      console.log("NEW MESSAGE", newMessage);
+      const newMessage = newData.createdMessage;
       prevData.data.listMessages.push(newMessage);
       return prevData.data;
     }
