@@ -1,6 +1,12 @@
 export default {
   aws_appsync_graphqlEndpoint: '',
   aws_appsync_region: '',
-  aws_appsync_authenticationType: '',
-  aws_appsync_apiKey: ''
+  aws_appsync_authenticationType: 'AMAZON_COGNITO_USER_POOLS',
+  aws_appsync_apiKey: '',
+  Auth: {
+    identityPoolId: ''
+    region: '',
+    userPoolId: '',
+    userPoolWebClientId: '',
+  },
 };
