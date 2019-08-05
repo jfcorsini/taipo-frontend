@@ -11,7 +11,10 @@
         <div v-else-if="errors.length > 0"></div>
         <div v-else-if="data">
           <div v-for="item in data.listMessages" v-bind:key="item.messageId">
-            <p>Message: {{ item.message }}</p>
+            <p>
+              <b>{{ item.username }}</b>
+              says: {{ item.message }}
+            </p>
           </div>
         </div>
       </template>
@@ -28,6 +31,7 @@
 </template>
 
 <script>
+import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 
 const listChatMessagesQuery = `query listMessages($chatId: String!) {
@@ -36,6 +40,7 @@ const listChatMessagesQuery = `query listMessages($chatId: String!) {
     message
     sortKey
     messageId
+    username
   }
 }`;
 
@@ -45,17 +50,21 @@ const OnCreateMessageSubscription = `subscription createdMessage($chatId: String
       message
       sortKey
       messageId
+      username
     }
   }`;
 
-const createMessageMutation = `mutation createMessage($chatId: String!, $message: String!) {
-    createMessage(input: { chatId: $chatId, message: $message }) {
+const createMessageMutation = `mutation createMessage($chatId: String!, $message: String!, $username: String!) {
+    createMessage(input: { chatId: $chatId, message: $message, username: $username }) {
       chatId
       message
       sortKey
       messageId
+      username
     }
   }`;
+
+let user;
 
 export default {
   name: "chat",
@@ -63,6 +72,9 @@ export default {
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
     this.hydrated = true;
+
+    user = await Auth.currentAuthenticatedUser();
+    console.log("This is the user", user.username);
   },
 
   data() {
@@ -90,7 +102,8 @@ export default {
     createMessageMutation() {
       return this.$Amplify.graphqlOperation(createMessageMutation, {
         chatId: this.$route.params.chatId,
-        message: this.message
+        message: this.message,
+        username: user ? user.username : null // Should fail if no user
       });
     }
   },
