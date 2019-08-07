@@ -10,10 +10,18 @@
 </template>
 
 <script>
-import { Auth } from "aws-amplify";
+import { Auth, API, graphqlOperation } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
+
+const putUserMutationQuery = `mutation putUser($username: String!, $email: String!) {
+  putUser(input: { username: $username, email: $email }) {
+    username
+  }
+}`;
+
 export default {
   name: "home",
+
   data() {
     return {
       form: {
@@ -22,10 +30,19 @@ export default {
       }
     };
   },
+
   methods: {
     async signIn() {
       const { username, password } = this.form;
-      await Auth.signIn(username, password);
+      const { attributes } = await Auth.signIn(username, password);
+
+      await API.graphql(
+        graphqlOperation(putUserMutationQuery, {
+          email: attributes.email,
+          username
+        })
+      );
+
       AmplifyEventBus.$emit("authState", "signedIn");
       this.$router.push("/chats");
     }
