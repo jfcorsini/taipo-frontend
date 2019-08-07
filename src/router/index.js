@@ -4,11 +4,13 @@ import Vue from 'vue'
 import Home from '../components/Home'
 import Chat from '../components/Chat'
 import Chats from '../components/Chats'
+import Users from '../components/Users'
 import Auth from '../components/Auth'
 
 const routes = [
   { path: '/', component: Home },
   { path: '/auth', component: Auth },
+  { path: '/users', component: Users, meta: { requiresAuth: true}  },
   { path: '/chats', component: Chats, meta: { requiresAuth: true}  },
   { path: '/chats/:chatId', component: Chat, meta: { requiresAuth: true}  },
 ]

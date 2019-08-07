@@ -7,6 +7,9 @@
       <router-link tag="p" to="/chats">
         <a>Chats</a>
       </router-link>
+      <router-link tag="p" to="/users">
+        <a>Users</a>
+      </router-link>
       <router-link tag="p" to="/auth" v-if="!signedIn">
         <a>Sign Up / Sign In</a>
       </router-link>
