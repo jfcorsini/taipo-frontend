@@ -9,7 +9,9 @@
         <div v-else-if="data">
           <ul>
             <div v-for="item in data.searchUsers" v-bind:key="item.username">
-              <li>{{ item.username }}</li>
+              <router-link tag="p" v-bind:to="'/users/' + item.username">
+                <a>{{ item.username }}</a>
+              </router-link>
             </div>
           </ul>
         </div>
