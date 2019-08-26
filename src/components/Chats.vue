@@ -1,14 +1,14 @@
 <template>
   <div class="home" v-if="hydrated">
-    <amplify-connect :query="listChatsQuery">
+    <amplify-connect :query="listSelfChatMembersQuery">
       <template slot-scope="{loading, data, errors}">
         <div v-if="loading">Loading...</div>
 
         <div v-else-if="errors.length > 0"></div>
         <div v-else-if="data">
-          <div v-for="item in data.listChats" v-bind:key="item.chatId">
+          <div v-for="item in data.listSelfChatMembers" v-bind:key="item.chatId">
             <router-link tag="p" v-bind:to="'/chats/' + item.chatId">
-              <a>{{ item.chatName }}</a>
+              <a>{{ item.chatId }}</a>
             </router-link>
           </div>
         </div>
@@ -28,15 +28,14 @@
 <script>
 import { components } from "aws-amplify-vue";
 
-const listChatsQuery = `query listChats {
-  listChats {
+const listSelfChatMembersQuery = `query listSelfChatMembers {
+  listSelfChatMembers {
     chatId
-    chatName
   }
 }`;
 
-const createChatMutation = `mutation createChat($chatName: String!) {
-    createChat(input: { chatName: $chatName }) {
+const createChatMutation = `mutation createChatGroupWithMembers($chatName: String!) {
+    createChatGroupWithMembers(input: { chatName: $chatName, usernames: [] }) {
       chatId
       chatName
     }
@@ -53,6 +52,7 @@ export default {
   data() {
     return {
       hydrated: false,
+      chatIds: [],
       chatName: ""
     };
   },
@@ -62,8 +62,8 @@ export default {
   },
 
   computed: {
-    listChatsQuery() {
-      return this.$Amplify.graphqlOperation(listChatsQuery);
+    listSelfChatMembersQuery() {
+      return this.$Amplify.graphqlOperation(listSelfChatMembersQuery);
     },
     createChatMutation() {
       return this.$Amplify.graphqlOperation(createChatMutation, {
@@ -73,8 +73,10 @@ export default {
   },
 
   methods: {
-    onCreateFinished() {
-      console.log("Chat created!");
+    onCreateFinished(mutationResponse) {
+      console.log("Chat created!", mutationResponse);
+      const chatId = mutationResponse.data.createChatGroupWithMembers.chatId;
+      this.$router.push(`/chats/${chatId}`);
     }
   }
 };

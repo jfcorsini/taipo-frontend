@@ -55,8 +55,8 @@ const getChatPrivateQuery = `query getChatPrivate($username: String!) {
   }
 }`;
 
-const createChatPrivateMutation = `mutation createChat($username: String!) {
-    createChat(input: { username: $username }) {
+const createChatPrivateMutation = `mutation createChatPrivate($username: String!) {
+    createChatPrivate(input: { username: $username }) {
       chatId
     }
   }`;
@@ -99,7 +99,7 @@ export default {
 
   methods: {
     onCreateChatFinished(mutationResponse) {
-      const chatId = mutationResponse.data.createChat.chatId;
+      const chatId = mutationResponse.data.createChatPrivate.chatId;
       this.$router.push(`/chats/${chatId}`);
     },
     hasPrivateChat(result) {
