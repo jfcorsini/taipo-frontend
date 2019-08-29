@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 
 const getUserQuery = `query getUser($username: String!) {
@@ -103,7 +102,6 @@ export default {
       this.$router.push(`/chats/${chatId}`);
     },
     hasPrivateChat(result) {
-      console.log("RESULT FROM QUERY", result);
       return result.getChatPrivate && result.getChatPrivate.chatId;
     }
   }

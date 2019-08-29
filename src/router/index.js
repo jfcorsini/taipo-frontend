@@ -1,20 +1,20 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 
-import Home from '../components/Home'
-import Chat from '../components/Chat'
-import Chats from '../components/Chats'
-import Users from '../components/Users'
-import User from '../components/User'
-import Auth from '../components/Auth'
+import Home from '../components/Pages/Home'
+import ChatPage from '../components/Pages/ChatPage'
+import ChatsPage from '../components/Pages/ChatsPage'
+import UsersPage from '../components/Pages/UsersPage'
+import UserPage from '../components/Pages/UserPage'
+import AuthPage from '../components/Pages/AuthPage'
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/auth', component: Auth },
-  { path: '/users', component: Users, meta: { requiresAuth: true}  },
-  { path: '/users/:username', component: User, meta: { requiresAuth: true}  },
-  { path: '/chats', component: Chats, meta: { requiresAuth: true}  },
-  { path: '/chats/:chatId', component: Chat, meta: { requiresAuth: true}  },
+  { path: '/auth', component: AuthPage },
+  { path: '/users', component: UsersPage, meta: { requiresAuth: true}  },
+  { path: '/users/:username', component: UserPage, meta: { requiresAuth: true}  },
+  { path: '/chats', component: ChatsPage, meta: { requiresAuth: true}  },
+  { path: '/chats/:chatId', component: ChatPage, meta: { requiresAuth: true}  },
 ]
 
 const router = new VueRouter({

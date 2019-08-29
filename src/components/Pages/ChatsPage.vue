@@ -7,8 +7,10 @@
         <div v-else-if="errors.length > 0"></div>
         <div v-else-if="data">
           <div v-for="item in data.listSelfChatMembers" v-bind:key="item.chatId">
+            <!-- Chat details. Move to own component -->
             <router-link tag="p" v-bind:to="'/chats/' + item.chatId">
-              <a>{{ item.chatId }}</a>
+              <!-- <a>Private chat: {{ item.chatId }}</a> -->
+              <a>{{ getChatName(item.chatId) }}</a>
             </router-link>
           </div>
         </div>
@@ -26,11 +28,26 @@
 </template>
 
 <script>
+import { API, graphqlOperation } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 
 const listSelfChatMembersQuery = `query listSelfChatMembers {
   listSelfChatMembers {
     chatId
+  }
+}`;
+
+const getChatQuery = `query getChat($chatId: String!) {
+  getChat(input: { chatId: $chatId }) {
+    ... on ChatGroupConfig {
+      chatId
+      chatName
+    }
+
+    ... on ChatPrivateConfig {
+      chatId
+      private
+    }
   }
 }`;
 
@@ -77,6 +94,20 @@ export default {
       console.log("Chat created!", mutationResponse);
       const chatId = mutationResponse.data.createChatGroupWithMembers.chatId;
       this.$router.push(`/chats/${chatId}`);
+    },
+    async getChatName(chatId) {
+      const response = await API.graphql(
+        graphqlOperation(getChatQuery, { chatId })
+      );
+
+      const chat = response.data.getChat || {};
+
+      if (chat.private) {
+        const chatWith = chat.chatId;
+        return `Private chat with ${chatWith}`;
+      }
+
+      return chat.chatName;
     }
   }
 };
