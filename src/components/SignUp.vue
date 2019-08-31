@@ -39,7 +39,6 @@ export default {
         password,
         attributes: { email }
       });
-      console.log("RESULT", res);
       this.formState = "confirmSignUp";
     },
     async confirmSignUp() {

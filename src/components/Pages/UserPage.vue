@@ -61,7 +61,7 @@ const createChatPrivateMutation = `mutation createChatPrivate($username: String!
   }`;
 
 export default {
-  name: "chat",
+  name: "user-page",
 
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();

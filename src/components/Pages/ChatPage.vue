@@ -1,121 +1,91 @@
 <template>
-  <div class="home" v-if="hydrated">
-    <amplify-connect
-      :query="listChatMessagesQuery"
-      :subscription="createMessageSubscription"
-      :onSubscriptionMsg="onCreateMessage"
-    >
-      <template slot-scope="{loading, data, errors}">
-        <div v-if="loading">Loading...</div>
+  <div v-if="!loading">
+    <h1>{{ chat.chatName }}</h1>
 
-        <div v-else-if="errors.length > 0"></div>
-        <div v-else-if="data">
-          <div v-for="item in data.listMessages" v-bind:key="item.messageId">
-            <p>
-              <b>{{ item.username }}</b>
-              says: {{ item.message }}
-            </p>
-          </div>
-        </div>
-      </template>
-    </amplify-connect>
-    <div class="panel-body">
-      <amplify-connect :mutation="createMessageMutation" @done="onCreateFinished">
-        <template slot-scope="{ loading, mutate }">
-          <input v-model="message" placeholder="message" />
-          <button :disabled="loading" @click="mutate">Send message</button>
-        </template>
-      </amplify-connect>
-    </div>
+    <chat></chat>
+    <add-users-list
+      v-if="!chat.private"
+      v-on:members-added="handleNewMembers"
+      v-bind:members="this.members"
+      v-bind:chatId="this.chatId"
+    ></add-users-list>
   </div>
 </template>
 
 <script>
-import { Auth } from "aws-amplify";
-import { components } from "aws-amplify-vue";
+import { API, Auth, graphqlOperation } from "aws-amplify";
+import Chat from "../Chat";
+import AddUsersList from "../AddUsersList";
 
-const listChatMessagesQuery = `query listMessages($chatId: String!) {
-  listMessages(input: {chatId: $chatId}) {
+const getChatConfigQuery = `query getChat($chatId: String!) {
+  getChat(input: { chatId: $chatId }) {
+    ... on ChatGroupConfig {
+      chatId
+      chatName
+    }
+
+    ... on ChatPrivateConfig {
+      chatId
+      private
+    }
+  }
+}`;
+
+const getChatMembersQuery = `query getChatMembers($chatId: String!) {
+  getChatMembers(input: { chatId: $chatId }) {
     chatId
-    message
-    sortKey
-    messageId
     username
   }
 }`;
 
-const OnCreateMessageSubscription = `subscription createdMessage($chatId: String!) {
-    createdMessage (chatId: $chatId) {
-      chatId
-      message
-      sortKey
-      messageId
-      username
-    }
-  }`;
-
-const createMessageMutation = `mutation createMessage($chatId: String!, $message: String!, $username: String!) {
-    createMessage(input: { chatId: $chatId, message: $message, username: $username }) {
-      chatId
-      message
-      sortKey
-      messageId
-      username
-    }
-  }`;
-
-let user;
-
 export default {
-  name: "chat",
+  name: "chat-page",
 
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
-    this.hydrated = true;
-
-    user = await Auth.currentAuthenticatedUser();
-    console.log("This is the user", user.username);
+    await this.getChatConfig();
+    await this.getChatMembers();
+    this.loading = false;
   },
 
   data() {
     return {
-      hydrated: false,
-      message: ""
+      loading: true,
+      chatId: this.$route.params.chatId,
+      chat: null,
+      members: []
     };
   },
 
   components: {
-    ...components
-  },
-
-  computed: {
-    listChatMessagesQuery() {
-      return this.$Amplify.graphqlOperation(listChatMessagesQuery, {
-        chatId: this.$route.params.chatId
-      });
-    },
-    createMessageSubscription() {
-      return this.$Amplify.graphqlOperation(OnCreateMessageSubscription, {
-        chatId: this.$route.params.chatId
-      });
-    },
-    createMessageMutation() {
-      return this.$Amplify.graphqlOperation(createMessageMutation, {
-        chatId: this.$route.params.chatId,
-        message: this.message,
-        username: user ? user.username : null // Should fail if no user
-      });
-    }
+    Chat,
+    AddUsersList
   },
 
   methods: {
-    onCreateFinished() {
-      console.log("Message created!");
+    async getChatConfig() {
+      const result = await API.graphql(
+        graphqlOperation(getChatConfigQuery, {
+          chatId: this.chatId
+        })
+      );
+      this.chat = result.data.getChat;
     },
-    onCreateMessage(prevData, newData) {
-      const newMessage = newData.createdMessage;
-      prevData.data.listMessages.push(newMessage);
-      return prevData.data;
+
+    async getChatMembers() {
+      const res = await API.graphql(
+        graphqlOperation(getChatMembersQuery, {
+          chatId: this.chatId
+        })
+      );
+
+      this.members = res.data.getChatMembers.map(member => member.username);
+    },
+
+    handleNewMembers(usernames) {
+      usernames.forEach(username => {
+        this.members.push(username);
+      });
     }
   }
 };

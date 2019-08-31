@@ -41,7 +41,7 @@ const createChatMutation = `mutation createChatGroupWithMembers($chatName: Strin
   }`;
 
 export default {
-  name: "chat",
+  name: "chat-page",
 
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
@@ -74,7 +74,6 @@ export default {
 
   methods: {
     onCreateFinished(mutationResponse) {
-      console.log("Chat created!", mutationResponse);
       const chatId = mutationResponse.data.createChatGroupWithMembers.chatId;
       this.$router.push(`/chats/${chatId}`);
     }

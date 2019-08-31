@@ -34,7 +34,7 @@ const searchUsersQuery = `query searchUsers($username: String) {
 let user;
 
 export default {
-  name: "chat",
+  name: "users-page",
 
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
