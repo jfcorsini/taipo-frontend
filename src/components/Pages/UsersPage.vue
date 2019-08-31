@@ -8,7 +8,12 @@
         <div v-else-if="errors.length > 0"></div>
         <div v-else-if="data">
           <ul>
-            <div v-for="item in data.searchUsers" v-bind:key="item.username">
+            <!-- eslint-disable vue/no-use-v-if-with-v-for -->
+            <div
+              v-for="item in data.searchUsers"
+              v-bind:key="item.username"
+              v-if="item.username !== authUsername"
+            >
               <router-link tag="p" v-bind:to="'/users/' + item.username">
                 <a>{{ item.username }}</a>
               </router-link>
@@ -31,20 +36,20 @@ const searchUsersQuery = `query searchUsers($username: String) {
   }
 }`;
 
-let user;
-
 export default {
   name: "users-page",
 
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
+    this.authUsername = (await Auth.currentAuthenticatedUser()).username;
     this.hydrated = true;
   },
 
   data() {
     return {
       hydrated: false,
-      usernameFilter: ""
+      usernameFilter: "",
+      authUsername: null
     };
   },
 
