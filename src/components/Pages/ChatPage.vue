@@ -2,13 +2,16 @@
   <div v-if="!loading">
     <h1>{{ chat.chatName }}</h1>
 
-    <chat></chat>
-    <add-users-list
-      v-if="!chat.private"
-      v-on:members-added="handleNewMembers"
-      v-bind:members="this.members"
-      v-bind:chatId="this.chatId"
-    ></add-users-list>
+    <div class="row">
+      <chat class="col-4"></chat>
+      <add-users-list
+        class="col-8"
+        v-if="!chat.private"
+        v-on:members-added="handleNewMembers"
+        v-bind:members="this.members"
+        v-bind:chatId="this.chatId"
+      ></add-users-list>
+    </div>
   </div>
 </template>
 

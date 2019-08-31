@@ -10,6 +10,10 @@ import App from './App'
 import router from './router'
 import config from './config'
 
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 const options = {
   defaultOptions: {
    watchQuery: {
@@ -31,6 +35,7 @@ const appsyncProvider = new VueApollo({
  defaultClient: client
 })
 
+Vue.use(BootstrapVue)
 Vue.use(VueApollo)
 Vue.config.productionTip = false
 

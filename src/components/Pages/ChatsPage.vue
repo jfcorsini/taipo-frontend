@@ -1,18 +1,22 @@
 <template>
-  <div class="home" v-if="hydrated">
-    <amplify-connect :query="listSelfChatMembersQuery">
-      <template slot-scope="{loading, data, errors}">
-        <div v-if="loading">Loading...</div>
+  <div v-if="hydrated" class="row">
+    <div class="col-md-4">
+      <amplify-connect :query="listSelfChatMembersQuery">
+        <template slot-scope="{loading, data, errors}">
+          <h1>List of chats</h1>
+          <div v-if="loading">Loading...</div>
 
-        <div v-else-if="errors.length > 0"></div>
-        <div v-else-if="data">
-          <div v-for="item in data.listSelfChatMembers" v-bind:key="item.chatId">
-            <chat-element :chatId="item.chatId"></chat-element>
+          <div v-else-if="errors.length > 0"></div>
+          <div v-else-if="data">
+            <div v-for="item in data.listSelfChatMembers" v-bind:key="item.chatId">
+              <chat-element :chatId="item.chatId"></chat-element>
+            </div>
           </div>
-        </div>
-      </template>
-    </amplify-connect>
-    <div class="panel-body">
+        </template>
+      </amplify-connect>
+    </div>
+    <div class="offset-md-2"></div>
+    <div class="col-md-3">
       <amplify-connect :mutation="createChatMutation" @done="onCreateFinished">
         <template slot-scope="{ loading, mutate }">
           <input v-model="chatName" placeholder="Chat name" />

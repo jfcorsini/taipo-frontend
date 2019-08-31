@@ -1,17 +1,17 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <div class="nav">
-      <router-link tag="p" to="/">
-        <a>Home</a>
+      <router-link class="nav-item" tag="p" to="/">
+        <a class="nav-link">Home</a>
       </router-link>
-      <router-link tag="p" to="/chats">
-        <a>Chats</a>
+      <router-link class="nav-item" tag="p" to="/chats">
+        <a class="nav-link">Chats</a>
       </router-link>
-      <router-link tag="p" to="/users">
-        <a>Users</a>
+      <router-link class="nav-item" tag="p" to="/users">
+        <a class="nav-link">Users</a>
       </router-link>
-      <router-link tag="p" to="/auth" v-if="!signedIn">
-        <a>Sign Up / Sign In</a>
+      <router-link class="nav-item" tag="p" to="/auth" v-if="!signedIn">
+        <a class="nav-link">Sign Up / Sign In</a>
       </router-link>
       <div class="sign-out">
         <button v-if="signedIn" v-on:click="signOut" class="button">Sign out</button>

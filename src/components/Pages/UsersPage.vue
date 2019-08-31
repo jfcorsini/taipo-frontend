@@ -1,8 +1,9 @@
 <template>
-  <div class="home" v-if="hydrated">
-    <input v-model="usernameFilter" placeholder="Filter by username" />
+  <div class="container" v-if="hydrated">
     <amplify-connect :query="searchUsersQuery">
       <template slot-scope="{loading, data, errors}">
+        <h1>List of users</h1>
+        <input v-model="usernameFilter" placeholder="Filter by username" />
         <div v-if="loading">Loading...</div>
 
         <div v-else-if="errors.length > 0"></div>
