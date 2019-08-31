@@ -47,7 +47,7 @@ export default {
   },
   async beforeCreate() {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      await Auth.currentAuthenticatedUser();
       this.signedIn = true;
     } catch (err) {
       this.signedIn = false;

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import Chat from "../Chat";
 import AddUsersList from "../AddUsersList";
 

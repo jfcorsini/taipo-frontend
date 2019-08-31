@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import { debounce } from "lodash";
 
 const searchUsersQuery = `query searchUsers($username: String) {
@@ -35,8 +35,6 @@ const addMembersMutation = `mutation putMembersToChat($chatId: ID!, $usernames: 
       username
     }
   }`;
-
-let user;
 
 export default {
   name: "add-users-list",
@@ -64,7 +62,7 @@ export default {
 
   watch: {
     // whenever usernameFilter changes, this function will run
-    usernameFilter: function(username) {
+    usernameFilter: function() {
       this.debouncedSearchUsers();
     }
   },
