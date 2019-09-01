@@ -2,11 +2,17 @@
   <div v-if="!loading">
     <h1>{{ chat.chatName }}</h1>
 
+    <button
+      v-if="!chat.private"
+      v-on:click="toggleShowUsers"
+      class="toggle"
+    >{{ showUsers ? 'Hide users' : 'Show users' }}</button>
+
     <div class="row">
       <chat class="col-4"></chat>
       <add-users-list
         class="col-8"
-        v-if="!chat.private"
+        v-if="showUsers"
         v-on:members-added="handleNewMembers"
         v-bind:members="this.members"
         v-bind:chatId="this.chatId"
@@ -51,13 +57,23 @@ export default {
     this.loading = false;
   },
 
+  props: ["chatId"],
+
   data() {
     return {
       loading: true,
-      chatId: this.$route.params.chatId,
       chat: null,
-      members: []
+      members: [],
+      showUsers: false
     };
+  },
+
+  watch: {
+    // whenever usernameFilter changes, this function will run
+    chatId: async function() {
+      await this.getChatConfig();
+      await this.getChatMembers();
+    }
   },
 
   components: {
@@ -89,6 +105,10 @@ export default {
       usernames.forEach(username => {
         this.members.push(username);
       });
+    },
+
+    toggleShowUsers() {
+      this.showUsers = !this.showUsers;
     }
   }
 };

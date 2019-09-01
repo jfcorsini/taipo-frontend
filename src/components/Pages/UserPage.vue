@@ -74,6 +74,8 @@ export default {
     };
   },
 
+  props: ["username"],
+
   components: {
     ...components
   },
@@ -81,17 +83,17 @@ export default {
   computed: {
     getUser() {
       return this.$Amplify.graphqlOperation(getUserQuery, {
-        username: this.$route.params.username
+        username: this.username
       });
     },
     getChatPrivate() {
       return this.$Amplify.graphqlOperation(getChatPrivateQuery, {
-        username: this.$route.params.username
+        username: this.username
       });
     },
     createChat() {
       return this.$Amplify.graphqlOperation(createChatPrivateMutation, {
-        username: this.$route.params.username
+        username: this.username
       });
     }
   },

@@ -24,6 +24,7 @@
         </template>
       </amplify-connect>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 

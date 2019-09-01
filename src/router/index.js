@@ -11,10 +11,21 @@ import AuthPage from '../components/Pages/AuthPage'
 const routes = [
   { path: '/', component: Home },
   { path: '/auth', component: AuthPage },
-  { path: '/users', component: UsersPage, meta: { requiresAuth: true}  },
-  { path: '/users/:username', component: UserPage, meta: { requiresAuth: true}  },
-  { path: '/chats', component: ChatsPage, meta: { requiresAuth: true}  },
-  { path: '/chats/:chatId', component: ChatPage, meta: { requiresAuth: true}  },
+  { path: '/users', component: UsersPage, meta: { requiresAuth: true}, children: [
+    {
+      path: '/users/:username',
+      component: UserPage,
+      props: true,
+    },
+  ]},
+  
+  { path: '/chats', component: ChatsPage, meta: { requiresAuth: true}, children: [
+    {
+      path: '/chats/:chatId',
+      component: ChatPage,
+      props: true,
+    },
+  ] },
 ]
 
 const router = new VueRouter({

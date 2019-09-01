@@ -19,6 +19,7 @@
                 <a>{{ item.username }}</a>
               </router-link>
             </div>
+            <router-view></router-view>
           </ul>
         </div>
       </template>
