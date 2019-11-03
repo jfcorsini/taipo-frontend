@@ -1,11 +1,15 @@
 <template>
-  <div>
+  <div class="container">
     <h2>Sign In</h2>
-    <div class="formcontainer">
-      <input v-model="form.username" class="input" placeholder="Username" />
-      <input type="password" v-model="form.password" class="input" placeholder="Password" />
-      <button v-on:click="signIn" class="button">Sign In</button>
-    </div>
+    <b-form>
+      <b-form-group id="signin-username-group" label="Username" label-for="signin-username">
+        <b-form-input v-model="form.username" id="signin-username" required />
+      </b-form-group>
+      <b-form-group id="signin-password-group" label="Password" label-for="signin-password">
+        <b-form-input v-model="form.password" id="signin-password" type="password" required />
+      </b-form-group>
+      <b-button v-on:click="signIn" type="submit">Sign In</b-button>
+    </b-form>
   </div>
 </template>
 

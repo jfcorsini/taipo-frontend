@@ -1,16 +1,28 @@
 <template>
-  <div>
+  <div class="container">
     <h2>{{ formState === 'signUp' ? 'Create account' : 'Confirm Sign Up' }}</h2>
-    <div class="formcontainer" v-if="formState === 'signUp'">
-      <input v-model="form.username" class="input" placeholder="Username" />
-      <input type="password" v-model="form.password" class="input" placeholder="Password" />
-      <input v-model="form.email" class="input" placeholder="Email" />
-      <button v-on:click="signUp" class="button">Sign Up</button>
-    </div>
-    <div class="formcontainer" v-if="formState === 'confirmSignUp'">
-      <input v-model="form.authCode" class="input" placeholder="Authorization code" />
-      <button v-on:click="confirmSignUp" class="button">Confirm Sign Up</button>
-    </div>
+    <b-form v-if="formState === 'signUp'">
+      <b-form-group id="signup-username-group" label="Username" label-for="signup-username">
+        <b-form-input id="signup-username" v-model="form.username" />
+      </b-form-group>
+      <b-form-group id="signup-password-group" label-for="signup-password" label="Password">
+        <b-form-input id="signup-password" type="password" v-model="form.password" required />
+      </b-form-group>
+      <b-form-group id="signup-email-group" label="Email" label-for="signup-email">
+        <b-form-input id="signup-email" v-model="form.email" />
+      </b-form-group>
+      <b-button v-on:click="signUp">Sign Up</b-button>
+    </b-form>
+    <b-form v-if="formState === 'confirmSignUp'">
+      <b-form-group
+        id="signup-authorization-group"
+        label="Authorization code"
+        label-for="signup-authorization"
+      >
+        <b-form-input v-model="form.authCode" id="signup-authorization" />
+      </b-form-group>
+      <b-button v-on:click="confirmSignUp">Confirm Sign Up</b-button>
+    </b-form>
   </div>
 </template>
 
@@ -50,32 +62,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.formcontainer {
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  margin: 0 auto;
-}
-.input {
-  margin-bottom: 7px;
-  height: 38px;
-  border: none;
-  outline: none;
-  border-bottom: 2px solid #ddd;
-  font-size: 20px;
-}
-.button {
-  height: 45px;
-  border: none;
-  outline: none;
-  background-color: #dddddd;
-  margin-top: 8px;
-  cursor: pointer;
-  font-size: 18px;
-}
-.button:hover {
-  opacity: 0.7;
-}
-</style>

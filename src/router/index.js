@@ -9,7 +9,7 @@ import UserPage from '../components/Pages/UserPage'
 import AuthPage from '../components/Pages/AuthPage'
 
 const routes = [
-  { path: '/', component: Home },
+  { path: '/', component: Home, meta: { requiresAuth: true}},
   { path: '/auth', component: AuthPage },
   { path: '/users', component: UsersPage, meta: { requiresAuth: true}, children: [
     {

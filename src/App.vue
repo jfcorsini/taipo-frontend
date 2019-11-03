@@ -1,6 +1,9 @@
 <template>
-  <div id="app" class="container">
-    <div class="nav">
+  <div id="app">
+    <div v-if="!signedIn">
+      <router-view></router-view>
+    </div>
+    <div v-else class="nav">
       <router-link class="nav-item" tag="p" to="/">
         <a class="nav-link">Home</a>
       </router-link>
@@ -10,14 +13,11 @@
       <router-link class="nav-item" tag="p" to="/users">
         <a class="nav-link">Users</a>
       </router-link>
-      <router-link class="nav-item" tag="p" to="/auth" v-if="!signedIn">
-        <a class="nav-link">Sign Up / Sign In</a>
-      </router-link>
       <div class="sign-out">
         <button v-if="signedIn" v-on:click="signOut" class="button">Sign out</button>
       </div>
+      <router-view></router-view>
     </div>
-    <router-view></router-view>
   </div>
 </template>
 
