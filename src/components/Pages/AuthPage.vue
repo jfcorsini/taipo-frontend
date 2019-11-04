@@ -22,7 +22,7 @@
 import SignUp from "../SignUp";
 import SignIn from "../SignIn";
 
-import backgroundUrl from "@/assets/imgs/heather-lo--BjAQ218NaM-unsplash.jpg";
+import backgroundUrl from "@/assets/imgs/sandro-katalina-k1bO_VTiZSs-unsplash.jpg";
 
 export default {
   name: "app",
@@ -48,8 +48,9 @@ export default {
 
 <style lang="scss">
 .auth {
-  height: 100vh;
-  max-width: 100%;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
 
   background-position: center;
   background-repeat: no-repeat;
