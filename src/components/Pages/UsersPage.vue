@@ -1,33 +1,40 @@
 <template>
-  <div class="container" v-if="hydrated">
-    <amplify-connect :query="searchUsersQuery">
-      <template slot-scope="{loading, data, errors}">
-        <h1>List of users</h1>
-        <input v-model="usernameFilter" placeholder="Filter by username" />
-        <div v-if="loading">Loading...</div>
+  <div id="page" v-if="hydrated">
+    <div id="side-bar">
+      <nav-bar></nav-bar>
+      <div>
+        <amplify-connect :query="searchUsersQuery">
+          <template slot-scope="{loading, data, errors}">
+            <input v-model="usernameFilter" placeholder="Filter by username" />
+            <div v-if="loading">Loading...</div>
 
-        <div v-else-if="errors.length > 0"></div>
-        <div v-else-if="data">
-          <ul>
-            <!-- eslint-disable vue/no-use-v-if-with-v-for -->
-            <div
-              v-for="item in data.searchUsers"
-              v-bind:key="item.username"
-              v-if="item.username !== authUsername"
-            >
-              <router-link tag="p" v-bind:to="'/users/' + item.username">
-                <a>{{ item.username }}</a>
-              </router-link>
+            <div v-else-if="errors.length > 0"></div>
+            <div v-else-if="data">
+              <ul>
+                <!-- eslint-disable vue/no-use-v-if-with-v-for -->
+                <div
+                  v-for="item in data.searchUsers"
+                  v-bind:key="item.username"
+                  v-if="item.username !== authUsername"
+                >
+                  <router-link tag="p" v-bind:to="'/users/' + item.username">
+                    <a>{{ item.username }}</a>
+                  </router-link>
+                </div>
+              </ul>
             </div>
-            <router-view></router-view>
-          </ul>
-        </div>
-      </template>
-    </amplify-connect>
+          </template>
+        </amplify-connect>
+      </div>
+    </div>
+    <div id="main-window">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+import NavBar from "../NavBar";
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 
@@ -56,7 +63,8 @@ export default {
   },
 
   components: {
-    ...components
+    ...components,
+    NavBar
   },
 
   computed: {

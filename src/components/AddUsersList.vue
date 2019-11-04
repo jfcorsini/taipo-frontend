@@ -1,13 +1,12 @@
 <template>
-  <div v-if="hydrated" class="row">
-    <div class="col-md-5">
+  <div v-if="hydrated">
+    <div>
       <h3>Current users</h3>
       <ul>
         <li v-for="username in members" v-bind:key="username">{{ username }}</li>
       </ul>
     </div>
-    <div class="offset-md-2"></div>
-    <div class="col-md-5">
+    <div>
       <h3>Add users to this chat</h3>
       <input v-model="usernameFilter" placeholder="Filter by username" />
       <button @click="addMembers">Add members</button>

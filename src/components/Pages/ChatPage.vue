@@ -1,23 +1,24 @@
 <template>
-  <div v-if="!loading">
-    <h1>{{ chat.chatName }}</h1>
+  <div v-if="!loading" id="chat-page">
+    <div>
+      <h1 v-if="!chat.private">{{ chat.chatName }}</h1>
+      <button
+        v-if="!chat.private"
+        v-on:click="toggleShowUsers"
+        class="toggle"
+      >{{ showUsers ? 'Hide users' : 'Show users' }}</button>
+      <chat></chat>
+    </div>
 
-    <button
-      v-if="!chat.private"
-      v-on:click="toggleShowUsers"
-      class="toggle"
-    >{{ showUsers ? 'Hide users' : 'Show users' }}</button>
-
-    <div class="row">
-      <chat class="col-4"></chat>
+    <transition name="fade">
       <add-users-list
-        class="col-8"
-        v-if="showUsers"
+        id="chat-page-users"
+        v-if="showUsers && !chat.private"
         v-on:members-added="handleNewMembers"
         v-bind:members="this.members"
         v-bind:chatId="this.chatId"
       ></add-users-list>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -113,3 +114,24 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+#chat-page {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+#chat-page-users {
+  background-color: $color1-lighter;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  width: 150px;
+  transition: width 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  width: 0px;
+}
+</style>

@@ -1,21 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="!signedIn">
-      <router-view></router-view>
-    </div>
-    <div v-else class="nav">
-      <router-link class="nav-item" tag="p" to="/">
-        <a class="nav-link">Home</a>
-      </router-link>
-      <router-link class="nav-item" tag="p" to="/chats">
-        <a class="nav-link">Chats</a>
-      </router-link>
-      <router-link class="nav-item" tag="p" to="/users">
-        <a class="nav-link">Users</a>
-      </router-link>
-      <div class="sign-out">
-        <button v-if="signedIn" v-on:click="signOut" class="button">Sign out</button>
-      </div>
+    <div id="chat-container">
       <router-view></router-view>
     </div>
   </div>
@@ -63,24 +48,46 @@ export default {
 };
 </script>
 
-<style>
-.nav {
+
+<style lang="scss">
+#app {
+  height: 100vh;
+  background: linear-gradient(to left, $color1-dark 0%, $color1-light 100%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#chat-container {
+  min-width: 800px;
+  max-width: 1000px;
+  max-height: 800px;
+  height: 95vh;
+  background: #fff;
+  border-radius: 10px;
+
+  flex-grow: 1;
+
   display: flex;
 }
-.nav p {
-  padding: 0px 30px 0px 0px;
-  font-size: 18px;
-  color: #000;
+
+#page {
+  display: flex;
+  flex-grow: 1;
 }
-.nav p:hover {
-  opacity: 0.7;
+
+#side-bar {
+  border-radius: 10px 10px 0 0;
+  width: 300px;
+  height: 100%;
 }
-.nav p a {
-  text-decoration: none;
-}
-.signout {
-  background-color: #38a31e;
-  margin: 0;
-  padding: 11px 0px 1px;
+
+#main-window {
+  background-color: $color2-light;
+  border-radius: 0 10px 10px 0;
+
+  display: flex;
+  flex-grow: 1;
 }
 </style>

@@ -1,9 +1,20 @@
 <template>
-  <h1>Home</h1>
+  <div id="page">
+    <div id="side-bar">
+      <nav-bar></nav-bar>
+    </div>
+    <div id="main-window"></div>
+  </div>
 </template>
 
 <script>
+import NavBar from "../NavBar";
+
 export default {
-  name: 'home',
-}
+  name: "home",
+
+  components: {
+    NavBar
+  }
+};
 </script>

@@ -10,9 +10,20 @@ import App from './App'
 import router from './router'
 import config from './config'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faHome, faComments, faUsers, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+library.add(faHome)
+library.add(faComments)
+library.add(faUsers)
+library.add(faSignOutAlt)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 const options = {
   defaultOptions: {
