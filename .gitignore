@@ -3,6 +3,7 @@ node_modules
 /dist
 
 # local env files
+.env
 .env.local
 .env.*.local
 
@@ -29,5 +30,4 @@ build/
 dist/
 node_modules/
 aws-exports.js
-config.js
 awsconfiguration.json
