@@ -14,9 +14,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome, faComments, faUsers, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/scss/tailwind.scss';
 
 library.add(faHome)
 library.add(faComments)
@@ -46,7 +44,6 @@ const appsyncProvider = new VueApollo({
  defaultClient: client
 })
 
-Vue.use(BootstrapVue)
 Vue.use(VueApollo)
 Vue.config.productionTip = false
 

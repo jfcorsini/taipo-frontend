@@ -15,20 +15,19 @@
     "aws-amplify-vue": "^0.2.17",
     "aws-appsync": "^1.8.1",
     "babel-plugin-inline-dotenv": "^1.5.0",
-    "bootstrap": "^4.4.1",
-    "bootstrap-vue": "^2.5.0",
     "core-js": "^2.6.11",
     "dotenv": "^8.2.0",
     "graphql-tag": "^2.10.3",
     "lodash": "^4.17.15",
+    "tailwindcss": "^1.2.0",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.3",
     "vue-router": "^3.1.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
-    "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^4.2.3",
+    "@vue/cli-service": "^4.2.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -49,11 +48,6 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
     }
   },
   "browserslist": [
