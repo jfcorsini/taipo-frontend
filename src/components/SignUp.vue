@@ -1,28 +1,43 @@
 <template>
   <div class="container">
-    <h2>{{ formState === 'signUp' ? 'Create account' : 'Confirm Sign Up' }}</h2>
-    <b-form v-if="formState === 'signUp'">
-      <b-form-group id="signup-username-group" label="Username" label-for="signup-username">
-        <b-form-input id="signup-username" v-model="form.username" />
-      </b-form-group>
-      <b-form-group id="signup-password-group" label-for="signup-password" label="Password">
-        <b-form-input id="signup-password" type="password" v-model="form.password" required />
-      </b-form-group>
-      <b-form-group id="signup-email-group" label="Email" label-for="signup-email">
-        <b-form-input id="signup-email" v-model="form.email" />
-      </b-form-group>
-      <b-button v-on:click="signUp">Sign Up</b-button>
-    </b-form>
-    <b-form v-if="formState === 'confirmSignUp'">
-      <b-form-group
-        id="signup-authorization-group"
-        label="Authorization code"
-        label-for="signup-authorization"
-      >
-        <b-form-input v-model="form.authCode" id="signup-authorization" />
-      </b-form-group>
-      <b-button v-on:click="confirmSignUp">Confirm Sign Up</b-button>
-    </b-form>
+    <form v-if="formState === 'signUp'">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Username
+        </label>
+        <input v-model="form.username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+          Email
+        </label>
+        <input v-model="form.email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+          Password
+        </label>
+        <input v-model="form.password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password">
+      </div>
+      <div class="text-center">
+        <button v-on:click="signUp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Sign Up
+        </button>
+      </div>
+    </form>
+    <form v-if="formState === 'confirmSignUp'">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="signup-authorization">
+          Code
+        </label>
+        <input v-model="form.authCode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="signup-authorization" type="text" placeholder="Authorization code">
+      </div>
+      <div class="text-center">
+        <button v-on:click="confirmSignUp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Confirm
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 

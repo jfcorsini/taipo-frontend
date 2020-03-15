@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <div id="chat-container">
-      <router-view></router-view>
+  <div class="h-screen flex justify-center items-center bg-gray-200">
+    <div v-bind:class="{ 'w-10/12': signedIn }">
+        <router-view></router-view>
     </div>
   </div>
 </template>
@@ -50,28 +50,6 @@ export default {
 
 
 <style lang="scss">
-#app {
-  height: 100vh;
-  background: linear-gradient(to left, $color1-dark 0%, $color1-light 100%);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#chat-container {
-  min-width: 800px;
-  max-width: 1000px;
-  max-height: 800px;
-  height: 95vh;
-  background: #fff;
-  border-radius: 10px;
-
-  flex-grow: 1;
-
-  display: flex;
-}
-
 #page {
   display: flex;
   flex-grow: 1;

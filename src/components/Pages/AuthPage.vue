@@ -1,35 +1,24 @@
 <template>
-  <div class="auth" :style="{ backgroundImage: `url(${backgroundUrl})` }">
-    <div class="auth-form">
+    <div  class="w-full max-w-xs bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-h-full">
+      <h2 class="text-2xl font-light pb-6 text-center">
+        <span v-on:click="toggle" v-bind:class="{ 'underline text-blue-600': formState === 'signIn', 'cursor-pointer': formState !== 'signIn' }">Sign In</span>
+        /
+        <span v-on:click="toggle" v-bind:class="{ 'underline text-blue-600': formState === 'signUp', 'cursor-pointer': formState !== 'signUp'}">Sign Up</span>
+      </h2>
       <sign-up :toggle="toggle" v-if="formState === 'signUp'"></sign-up>
       <sign-in v-if="formState === 'signIn'"></sign-in>
-
-      <div v-on:click="toggle" class="toggle">
-        <p v-if="formState === 'signUp'">
-          Already sign up?
-          <span>Sign In</span>
-        </p>
-        <p v-else>
-          Need an account?
-          <span>Sign Up</span>
-        </p>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
 import SignUp from "../SignUp";
 import SignIn from "../SignIn";
 
-import backgroundUrl from "@/assets/imgs/sandro-katalina-k1bO_VTiZSs-unsplash.jpg";
-
 export default {
   name: "app",
   data() {
     return {
       formState: "signIn",
-      backgroundUrl
     };
   },
   methods: {
@@ -45,46 +34,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.auth {
-  height: 100%;
-  width: 100%;
-  border-radius: 10px;
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-
-  button {
-    background-color: $color1-dark;
-
-    &:hover {
-      background-color: $color1-light;
-    }
-  }
-
-  .auth-form {
-    min-height: 320px;
-    max-height: 420px;
-    width: 460px;
-    margin: 20px 30px;
-    margin: 0 auto;
-
-    background-color: white;
-    border-radius: 15px;
-
-    .toggle {
-      cursor: pointer;
-      font-size: 12px;
-      margin: 20px;
-
-      span {
-        color: $color1-dark;
-      }
-    }
-  }
-}
-</style>

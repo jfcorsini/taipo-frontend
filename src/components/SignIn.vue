@@ -1,15 +1,24 @@
 <template>
-  <div class="container">
-    <h2>Sign In</h2>
-    <b-form>
-      <b-form-group id="signin-username-group" label="Username" label-for="signin-username">
-        <b-form-input v-model="form.username" id="signin-username" required />
-      </b-form-group>
-      <b-form-group id="signin-password-group" label="Password" label-for="signin-password">
-        <b-form-input v-model="form.password" id="signin-password" type="password" required />
-      </b-form-group>
-      <b-button v-on:click="signIn" type="submit">Sign In</b-button>
-    </b-form>
+  <div>
+    <form>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          Username
+        </label>
+        <input v-model="form.username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username">
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+          Password
+        </label>
+        <input v-model="form.password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password">
+      </div>
+      <div class="text-center">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="signIn" type="button">
+          Sign In
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
