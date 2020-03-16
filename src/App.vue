@@ -1,6 +1,10 @@
 <template>
   <div class="h-screen flex justify-center items-center bg-gray-200">
-    <div v-bind:class="{ 'w-10/12': signedIn }">
+    <div v-if="!signedIn">
+        <router-view></router-view>
+    </div>
+    <div v-else id="main" class="w-10/12 bg-gray-100 border border-gray-700 shadow shadow-xl rounded-md">
+        <nav-bar/>
         <router-view></router-view>
     </div>
   </div>
@@ -9,6 +13,7 @@
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
+import NavBar from "./components/NavBar";
 
 const signOutConfig = {
   signOutButton: "Sign Out nooow" // type: string, default: 'Sign Out', required: false
@@ -16,6 +21,10 @@ const signOutConfig = {
 
 export default {
   name: "app",
+
+  components: {
+    NavBar
+  },
 
   data() {
     return {
@@ -52,7 +61,11 @@ export default {
 <style lang="scss">
 #page {
   display: flex;
-  flex-grow: 1;
+}
+
+#main {
+  height: 80vh;
+  display: block;
 }
 
 #side-bar {

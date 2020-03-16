@@ -1,31 +1,18 @@
 <template>
-  <div id="nav">
-    <router-link class="nav-item" tag="p" to="/">
-      <a class="nav-link">
-        <font-awesome-icon icon="home" />
-      </a>
-    </router-link>
-    <router-link class="nav-item" tag="p" to="/chats">
-      <a class="nav-link">
-        <font-awesome-icon icon="comments" />
-      </a>
-    </router-link>
-    <router-link class="nav-item" tag="p" to="/users">
-      <a class="nav-link">
-        <font-awesome-icon icon="users" />
-      </a>
-    </router-link>
-    <router-link class="nav-item" tag="p" to="/#" v-if="signedIn" v-on:click.native="signOut">
-      <a class="nav-link">
-        <font-awesome-icon icon="sign-out-alt" />
-      </a>
-    </router-link>
+  <div class="flex justify-around items-center bg-orange-200 h-8 rounded rounded-b-none">
+    <nav-bar-item name="Home" to="/" icon="home"/>
+    <nav-bar-item name="Chats" to="/chats" icon="comments"/>
+    <nav-bar-item name="Users" to="/users" icon="users"/>
+    <div v-if="signedIn" @click="signOut">
+      <nav-bar-item name="Sign Out" to="/#" icon="sign-out-alt"/>
+    </div>
   </div>
 </template>
 
 <script>
 import { AmplifyEventBus } from "aws-amplify-vue";
 import { Auth } from "aws-amplify";
+import NavBarItem from './NavBarItem'
 
 const signOutConfig = {
   signOutButton: "Sign Out nooow" // type: string, default: 'Sign Out', required: false
@@ -33,6 +20,10 @@ const signOutConfig = {
 
 export default {
   name: "nav-bar",
+
+  components: {
+    NavBarItem,
+  },
 
   data() {
     return {

@@ -1,7 +1,6 @@
 <template>
   <div v-if="hydrated" id="page">
     <div id="side-bar">
-      <nav-bar></nav-bar>
       <div>
         <amplify-connect :query="listSelfChatMembersQuery">
           <template slot-scope="{loading, data, errors}">
@@ -33,7 +32,6 @@
 
 <script>
 import ChatElement from "../ChatElement";
-import NavBar from "../NavBar";
 import { components } from "aws-amplify-vue";
 
 const listSelfChatMembersQuery = `query listSelfChatMembers {
@@ -68,7 +66,6 @@ export default {
   components: {
     ...components,
     ChatElement,
-    NavBar
   },
 
   computed: {

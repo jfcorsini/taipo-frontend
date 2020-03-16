@@ -1,7 +1,6 @@
 <template>
   <div id="page" v-if="hydrated">
     <div id="side-bar">
-      <nav-bar></nav-bar>
       <div>
         <amplify-connect :query="searchUsersQuery">
           <template slot-scope="{loading, data, errors}">
@@ -34,7 +33,6 @@
 </template>
 
 <script>
-import NavBar from "../NavBar";
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 
@@ -64,7 +62,6 @@ export default {
 
   components: {
     ...components,
-    NavBar
   },
 
   computed: {
