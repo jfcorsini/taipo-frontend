@@ -1,11 +1,13 @@
 <template>
-  <div class="h-screen flex justify-center items-center bg-gray-200">
+  <div class="h-screen flex justify-center items-center bg-gray-100">
     <div v-if="!signedIn">
         <router-view></router-view>
     </div>
-    <div v-else id="main" class="w-10/12 bg-gray-100 border border-gray-700 shadow shadow-xl rounded-md">
+    <div v-else class="w-10/12 border border-gray-700 shadow shadow-xl rounded-md">
         <nav-bar/>
-        <router-view></router-view>
+        <div id="main" class="bg-gray-200">
+            <router-view></router-view>
+        </div>
     </div>
   </div>
 </template>
@@ -65,7 +67,6 @@ export default {
 
 #main {
   height: 80vh;
-  display: block;
 }
 
 #side-bar {

@@ -1,6 +1,16 @@
 <template>
-  <div v-if="hydrated" id="page">
-    <div id="side-bar">
+  <div v-if="hydrated" class="h-full flex">
+    <div class="w-3/12 border border-solid border-gray-300 shadow shadow-sm h-full overflow-y-auto">
+      <div class="h-8">
+        <div class="flex m-1">
+          <amplify-connect :mutation="createChatMutation" @done="onCreateFinished">
+            <template slot-scope="{ loading, mutate }" class="h-full">
+              <input class="inline text-gray-700 text-sm font-bold mb-2 h-full" v-model="chatName" placeholder="Chat name" />
+              <button :disabled="loading" @click="mutate" class="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded">Create chat</button>
+            </template>
+          </amplify-connect>
+        </div>
+      </div>
       <div>
         <amplify-connect :query="listSelfChatMembersQuery">
           <template slot-scope="{loading, data, errors}">
@@ -15,16 +25,8 @@
           </template>
         </amplify-connect>
       </div>
-      <div id="create-chat">
-        <amplify-connect :mutation="createChatMutation" @done="onCreateFinished">
-          <template slot-scope="{ loading, mutate }">
-            <input v-model="chatName" placeholder="Chat name" />
-            <button :disabled="loading" @click="mutate">Create chat</button>
-          </template>
-        </amplify-connect>
-      </div>
     </div>
-    <div id="main-window">
+    <div class="w-9/12">
       <router-view></router-view>
     </div>
   </div>
@@ -87,10 +89,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-#create-chat {
-  margin-top: auto;
-  flex-grow: 1;
-}
-</style>

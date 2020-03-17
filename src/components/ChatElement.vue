@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <div v-if="!loading">
-      <router-link tag="p" v-bind:to="'/chats/' + chatId">
-        <a>{{ chatName }}</a>
+  <div class="h-full">
+    <div v-if="!loading" class="bg-white shadow-xs mb-2 mx-px font-light text-base cursor-pointer hover:bg-green-300 active:bg-green-400">
+      <router-link tag="p" v-bind:to="'/chats/' + chatId" class="inline-block h-16 w-full">
+      <div class="ml-8 mt-6">
+        {{ chatName }}
+      </div>
       </router-link>
     </div>
   </div>
