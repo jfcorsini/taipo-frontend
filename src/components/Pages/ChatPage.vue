@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" id="chat-page">
+  <div v-if="!loading" class="h-full overflow-y-auto m-2">
     <div>
       <h1 v-if="!chat.private">{{ chat.chatName }}</h1>
       <button
@@ -7,7 +7,7 @@
         v-on:click="toggleShowUsers"
         class="toggle"
       >{{ showUsers ? 'Hide users' : 'Show users' }}</button>
-      <chat></chat>
+      <chat v-bind:isPrivate="chat.private"/>
     </div>
 
     <transition name="fade">
@@ -116,11 +116,6 @@ export default {
 </script>
 
 <style lang="scss">
-#chat-page {
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-}
 
 #chat-page-users {
   background-color: $color1-lighter;

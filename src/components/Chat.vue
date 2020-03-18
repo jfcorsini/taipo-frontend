@@ -11,10 +11,12 @@
         <div v-else-if="errors.length > 0"></div>
         <div v-else-if="data">
           <div v-for="item in data.listMessages" v-bind:key="item.messageId">
-            <p>
-              <b>{{ item.username }}</b>
-              says: {{ item.message }}
-            </p>
+            <chat-message
+              v-bind:username="item.username"
+              v-bind:message="item.message"
+              v-bind:isPrivate="isPrivate"
+              v-bind:isSender=isSenderMessage(item)
+            />
           </div>
         </div>
       </template>
@@ -33,6 +35,7 @@
 <script>
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
+import ChatMessage from './ChatMessage';
 
 const listChatMessagesQuery = `query listMessages($chatId: String!) {
   listMessages(input: {chatId: $chatId}) {
@@ -84,8 +87,11 @@ export default {
   },
 
   components: {
-    ...components
+    ...components,
+    ChatMessage,
   },
+
+  props: ['isPrivate'],
 
   computed: {
     listChatMessagesQuery() {
@@ -104,7 +110,7 @@ export default {
         message: this.message,
         username: user ? user.username : null // Should fail if no user
       });
-    }
+    },
   },
 
   methods: {
@@ -112,7 +118,10 @@ export default {
       const newMessage = newData.createdMessage;
       prevData.data.listMessages.push(newMessage);
       return prevData.data;
+    },
+    isSenderMessage(message) {
+      return message.username === user.username;
     }
-  }
+  },
 };
 </script>
