@@ -1,34 +1,30 @@
 <template>
-  <div v-if="hydrated">
-    <amplify-connect
-      :query="listChatMessagesQuery"
-      :subscription="createMessageSubscription"
-      :onSubscriptionMsg="onCreateMessage"
-    >
-      <template slot-scope="{loading, data, errors}">
-        <div v-if="loading">Loading...</div>
+  <div class="h-full flex flex-col">
+    <div v-if="hydrated">
+      <amplify-connect
+        :query="listChatMessagesQuery"
+        :subscription="createMessageSubscription"
+        :onSubscriptionMsg="onCreateMessage"
+      >
+        <template slot-scope="{loading, data, errors}">
+          <div v-if="loading">Loading...</div>
 
-        <div v-else-if="errors.length > 0"></div>
-        <div v-else-if="data">
-          <div v-for="item in data.listMessages" v-bind:key="item.messageId">
-            <chat-message
-              v-bind:username="item.username"
-              v-bind:message="item.message"
-              v-bind:isPrivate="isPrivate"
-              v-bind:isSender=isSenderMessage(item)
-            />
+          <div v-else-if="errors.length > 0"></div>
+          <div v-else-if="data">
+            <div v-for="item in data.listMessages" v-bind:key="item.messageId">
+              <chat-message
+                v-bind:username="item.username"
+                v-bind:message="item.message"
+                v-bind:isPrivate="isPrivate"
+                v-bind:isSender=isSenderMessage(item)
+              />
+            </div>
           </div>
-        </div>
-      </template>
-    </amplify-connect>
-    <div class="panel-body">
-      <amplify-connect :mutation="createMessageMutation">
-        <template slot-scope="{ loading, mutate }">
-          <input v-model="message" placeholder="message" />
-          <button :disabled="loading" @click="mutate">Send message</button>
         </template>
       </amplify-connect>
     </div>
+
+    <chat-send-message/>
   </div>
 </template>
 
@@ -36,6 +32,7 @@
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 import ChatMessage from './ChatMessage';
+import ChatSendMessage from './ChatSendMessage';
 
 const listChatMessagesQuery = `query listMessages($chatId: String!) {
   listMessages(input: {chatId: $chatId}) {
@@ -49,16 +46,6 @@ const listChatMessagesQuery = `query listMessages($chatId: String!) {
 
 const OnCreateMessageSubscription = `subscription createdMessage($chatId: String!) {
     createdMessage (chatId: $chatId) {
-      chatId
-      message
-      sortKey
-      messageId
-      username
-    }
-  }`;
-
-const createMessageMutation = `mutation createMessage($chatId: String!, $message: String!, $username: String!) {
-    createMessage(input: { chatId: $chatId, message: $message, username: $username }) {
       chatId
       message
       sortKey
@@ -89,6 +76,7 @@ export default {
   components: {
     ...components,
     ChatMessage,
+    ChatSendMessage,
   },
 
   props: ['isPrivate'],
@@ -102,13 +90,6 @@ export default {
     createMessageSubscription() {
       return this.$Amplify.graphqlOperation(OnCreateMessageSubscription, {
         chatId: this.$route.params.chatId
-      });
-    },
-    createMessageMutation() {
-      return this.$Amplify.graphqlOperation(createMessageMutation, {
-        chatId: this.$route.params.chatId,
-        message: this.message,
-        username: user ? user.username : null // Should fail if no user
       });
     },
   },
