@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col">
-    <div v-if="hydrated">
+    <div class="overflow-y-auto" v-if="hydrated">
       <amplify-connect
         :query="listChatMessagesQuery"
         :subscription="createMessageSubscription"

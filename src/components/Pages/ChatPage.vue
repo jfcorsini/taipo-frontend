@@ -1,15 +1,21 @@
 <template>
-  <div v-if="!loading" class="h-full overflow-y-auto">
-    <div v-if="!chat.private">
-      <h1>{{ chat.chatName }}</h1>
-      <button
-        v-on:click="toggleShowUsers"
-        class="toggle"
-      >{{ showUsers ? 'Hide users' : 'Show users' }}</button>
+  <div v-if="!loading" class="h-full overflow-x-hidden overflow-y-auto flex justify-between">
+    <div class="w-full flex flex-col justify-center align-bottom">
+      <div v-if="!chat.private">
+        <h1 class="font-light text-3xl text-center leading-8">
+          {{ chat.chatName }}
+          <span
+            class="text-sm underline cursor-pointer"
+            v-on:click="toggleShowUsers"
+          >
+            {{ showUsers ? 'Hide users' : 'Show users' }}
+          </span>
+        </h1>
+      </div>
+      <chat v-bind:isPrivate="chat.private"/>
     </div>
-    <chat v-bind:isPrivate="chat.private"/>
 
-    <transition name="fade">
+    <transition name="slide-fade">
       <add-users-list
         id="chat-page-users"
         v-if="showUsers && !chat.private"
