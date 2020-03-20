@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-grow w-full">
-      <amplify-connect :mutation="createMessageMutation" class="mt-auto mb-1 ml-1">
+      <amplify-connect :mutation="createMessageMutation" class="mt-auto mb-1 ml-1 w-full">
         <template slot-scope="{ loading, mutate }">
           <input class="w-9/12 rounded-sm p-3" v-model="message" placeholder="Send message" />
           <button class="ml-4 bg-green-400 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" :disabled="loading" @click="mutate">Send</button>
