@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col">
+  <div class="h-full flex flex-col mr-2">
     <div class="overflow-y-auto" v-if="hydrated">
       <amplify-connect
         :query="listChatMessagesQuery"

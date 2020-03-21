@@ -1,18 +1,31 @@
 <template>
-  <div v-if="hydrated">
-    <div>
-      <h3>Current users</h3>
-      <ul>
-        <li v-for="username in members" v-bind:key="username">{{ username }}</li>
-      </ul>
+  <div v-if="hydrated" class="w-4/12 p-2 flex flex-col items-center border-solid border-gray-400 border-l-2">
+    <div class="flex-grow overflow-y-hidden bg-white rounded-lg w-10/12">
+      <div class="border-b-2 border-solid border-gray-400">
+        <h3 class="text-lg mt-1 p-2">Current users</h3>
+      </div>
+      <div class="ml-2 mt-1">
+        <div v-for="username in members" v-bind:key="username">
+          <router-link tag="p" v-bind:to="'/users/' + username">
+            <a class="text-base font-thin leading-6 underline">{{ username }}</a>
+          </router-link>
+        </div>
+      </div>
     </div>
-    <div>
-      <h3>Add users to this chat</h3>
-      <input v-model="usernameFilter" placeholder="Filter by username" />
-      <button @click="addMembers">Add members</button>
-      <div v-for="user in nonMembers" v-bind:key="user.username">
-        <input type="checkbox" :id="user.username" :value="user.username" v-model="selectedUsers" />
-        <label :for="user.username">{{ user.username }}</label>
+
+    <div class="flex-grow overflow-y-hidden bg-white rounded-lg w-10/12 mt-8">
+      <div class="border-b-2 border-solid border-gray-400">
+        <h3 class="text-lg mt-1 p-2">Add users</h3>
+      </div>
+      <div class="ml-2 mt-1">
+        <input class="rounded-sm p-1 bg-gray-200 w-6/12" v-model="usernameFilter" placeholder="Filter" />
+        <button class="ml-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" @click="addMembers">
+          Add
+        </button>
+        <div v-for="user in nonMembers" v-bind:key="user.username">
+          <input type="checkbox" :id="user.username" :value="user.username" v-model="selectedUsers" />
+          <label :for="user.username">{{ user.username }}</label>
+        </div>
       </div>
     </div>
   </div>

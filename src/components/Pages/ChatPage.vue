@@ -122,10 +122,6 @@ export default {
 
 <style lang="scss">
 
-#chat-page-users {
-  background-color: $color1-lighter;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   width: 150px;
