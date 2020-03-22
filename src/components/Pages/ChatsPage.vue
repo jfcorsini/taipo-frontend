@@ -5,7 +5,7 @@
         <div class="flex m-1">
           <amplify-connect :mutation="createChatMutation" @done="onCreateFinished">
             <template slot-scope="{ loading, mutate }" class="h-full">
-              <input class="inline text-gray-700 text-sm font-bold mb-2 h-full" v-model="chatName" placeholder="Chat name" />
+              <input class="inline text-gray-700 text-sm mb-2 h-full" v-model="chatName" placeholder="Chat name" />
               <button :disabled="loading" @click="mutate" class="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded">Create chat</button>
             </template>
           </amplify-connect>
