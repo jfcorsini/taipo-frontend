@@ -22,6 +22,7 @@ const getChatQuery = `query getChat($chatId: String!) {
 
     ... on ChatPrivateConfig {
       chatId
+      sortKey
       private
     }
   }
@@ -49,7 +50,7 @@ export default {
     const chat = response.data.getChat || {};
 
     if (chat.private) {
-      const usernames = chat.chatId.split("_");
+      const usernames = chat.sortKey.split("_");
       let chatWith = usernames[0];
       if (chatWith === user.username) {
         chatWith = usernames[1];
