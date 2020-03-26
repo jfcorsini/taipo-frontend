@@ -15,7 +15,7 @@
           <div v-else-if="data">
             <div v-for="item in data.searchUsers" v-bind:key="item.username">
               <div v-if="item.username !== authUsername" class="bg-white shadow-xs mb-2 mx-px font-light text-base cursor-pointer hover:bg-green-300 active:bg-green-400">
-                <router-link tag="p" v-bind:to="'/users/' + item.username" class="inline-block h-16 w-full">
+                <router-link tag="p" v-bind:to="'/users/' + item.username" class="inline-block h-16 w-full" v-bind:activeClass="'bg-green-400 shadow-lg'">
                 <div class="ml-8 mt-6">
                   {{ item.username }}
                 </div>
