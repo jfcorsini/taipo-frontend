@@ -5,25 +5,16 @@
         <div class="flex m-1">
           <amplify-connect :mutation="createChatMutation" @done="onCreateFinished">
             <template slot-scope="{ loading, mutate }" class="h-full">
-              <input class="inline text-gray-700 text-sm mb-2 h-full" v-model="chatName" placeholder="Chat name" />
-              <button :disabled="loading" @click="mutate" class="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded">Create chat</button>
+              <input class="inline text-gray-700 text-sm mb-2 h-full" v-model="newChatName" v-on:keyup.enter="onCreateChat(mutate)" placeholder="Chat name" />
+              <button :disabled="loading" @click="onCreateChat(mutate)" class="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded">Create chat</button>
             </template>
           </amplify-connect>
         </div>
       </div>
       <div>
-        <amplify-connect :query="listSelfChatMembersQuery">
-          <template slot-scope="{loading, data, errors}">
-            <div v-if="loading">Loading...</div>
-
-            <div v-else-if="errors.length > 0"></div>
-            <div v-else-if="data">
-              <div v-for="item in data.listSelfChatMembers" v-bind:key="item.chatId">
-                <chat-element :chatId="item.chatId"></chat-element>
-              </div>
-            </div>
-          </template>
-        </amplify-connect>
+        <div v-for="chatId in chatIds" v-bind:key="chatId">
+          <chat-element :chatId="chatId"></chat-element>
+        </div>
       </div>
     </div>
     <div class="w-9/12">
@@ -33,6 +24,7 @@
 </template>
 
 <script>
+import { API, graphqlOperation } from "aws-amplify";
 import ChatElement from "../ChatElement";
 import { components } from "aws-amplify-vue";
 
@@ -55,13 +47,15 @@ export default {
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
     this.hydrated = true;
+
+    await this.getAllChatsFromUser();
   },
 
   data() {
     return {
       hydrated: false,
       chatIds: [],
-      chatName: ""
+      newChatName: ""
     };
   },
 
@@ -71,12 +65,9 @@ export default {
   },
 
   computed: {
-    listSelfChatMembersQuery() {
-      return this.$Amplify.graphqlOperation(listSelfChatMembersQuery);
-    },
     createChatMutation() {
       return this.$Amplify.graphqlOperation(createChatMutation, {
-        chatName: this.chatName
+        chatName: this.newChatName
       });
     }
   },
@@ -84,7 +75,22 @@ export default {
   methods: {
     onCreateFinished(mutationResponse) {
       const chatId = mutationResponse.data.createChatGroupWithMembers.chatId;
+      this.chatIds.unshift(chatId);
+
       this.$router.push(`/chats/${chatId}`);
+    },
+
+    async getAllChatsFromUser() {
+      const response = await API.graphql(
+        graphqlOperation(listSelfChatMembersQuery)
+      );
+
+      this.chatIds = response.data.listSelfChatMembers.map(i => i.chatId);
+    },
+
+    onCreateChat(mutateFn){
+      this.newChatName = '';
+      mutateFn();
     }
   }
 };
