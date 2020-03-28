@@ -11,6 +11,9 @@
           <p>Last login: {{ data.getUser.lastLogin }}</p>
         </div>
 
+          <amplify-photo-picker v-bind:photoPickerConfig="photoPickerConfig"></amplify-photo-picker>
+
+
         <amplify-connect :query="getChatPrivate">
           <template slot-scope="{loading, data, errors}">
             <div v-if="loading">Checking for chat...</div>
@@ -70,7 +73,12 @@ export default {
 
   data() {
     return {
-      hydrated: false
+      hydrated: false,
+      photoPickerConfig: {
+        header: 'Set user photo',
+        defaultName: this.username,
+        path: 'users',
+      }
     };
   },
 
