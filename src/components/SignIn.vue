@@ -26,8 +26,8 @@
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { AmplifyEventBus } from "aws-amplify-vue";
 
-const putUserMutationQuery = `mutation putUser($username: String!, $email: String!) {
-  putUser(input: { username: $username, email: $email }) {
+const putUserMutationQuery = `mutation putUser($username: String!, $email: String!, $identityId: String!) {
+  putUser(input: { username: $username, email: $email, identityId: $identityId }) {
     username
   }
 }`;
@@ -48,11 +48,13 @@ export default {
     async signIn() {
       const { username, password } = this.form;
       const { attributes } = await Auth.signIn(username, password);
+      const { identityId } = await Auth.currentCredentials();
 
       await API.graphql(
         graphqlOperation(putUserMutationQuery, {
           email: attributes.email,
-          username
+          username,
+          identityId
         })
       );
 

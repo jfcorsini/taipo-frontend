@@ -10,8 +10,12 @@
           <h3>Email: {{ data.getUser.email }}</h3>
           <p>Last login: {{ data.getUser.lastLogin }}</p>
         </div>
+        <div v-if="username === authUser.username">
+          <amplify-photo-picker v-bind:photoPickerConfig="getphotoPickerConfig()"/>
+        </div>
 
-        <amplify-connect :query="getChatPrivate">
+
+        <amplify-connect  v-if="username !== authUser.username" :query="getChatPrivate">
           <template slot-scope="{loading, data, errors}">
             <div v-if="loading">Checking for chat...</div>
 
@@ -38,6 +42,7 @@
 </template>
 
 <script>
+import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 
 const getUserQuery = `query getUser($username: String!) {
@@ -65,12 +70,18 @@ export default {
 
   async mounted() {
     await this.$apollo.provider.defaultClient.hydrated();
+    this.authUser = await Auth.currentAuthenticatedUser();
     this.hydrated = true;
   },
 
   data() {
     return {
-      hydrated: false
+      hydrated: false,
+      photoPickerConfig: {
+        header: 'Set user photo',
+        defaultName: this.username,
+        path: this.authUser && `users/${this.authUser.attributes.sub}`,
+      }
     };
   },
 
@@ -105,6 +116,16 @@ export default {
     },
     hasPrivateChat(result) {
       return result.getChatPrivate && result.getChatPrivate.chatId;
+    },
+    getphotoPickerConfig() {
+      return {
+        header: 'Set user photo',
+        defaultName: 'profile',
+        path: 'images/',
+        storageOptions: {
+          level: 'protected'
+        }
+      };
     }
   }
 };

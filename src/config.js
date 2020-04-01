@@ -9,6 +9,12 @@ export default {
     userPoolId: process.env.AWS_AUTH_USER_POOL_ID,
     userPoolWebClientId: process.env.AWS_AUTH_USER_POOL_WEB_CLIENT_ID,
   },
+  Storage: {
+    AWSS3: {
+        bucket: 'taipo-app',
+        region: 'eu-west-1',
+    }
+  },
   Analytics: { 
     disabled: true
   }
