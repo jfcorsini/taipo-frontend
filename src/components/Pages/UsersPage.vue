@@ -15,10 +15,10 @@
           <div v-else-if="data">
             <div v-for="item in data.searchUsers" v-bind:key="item.username">
               <div class="bg-white shadow-xs mb-2 mx-px font-light text-base cursor-pointer hover:bg-green-300 active:bg-green-400">
-                <router-link tag="p" v-bind:to="'/users/' + item.username" class="inline-block h-16 w-full" v-bind:activeClass="'bg-green-400 shadow-lg'">
-                <amplify-s3-image v-bind:imagePath="'images/profile'" v-bind:s3ImageConfig="{level: 'protected', identityId: item.identityId}"/>
-                <div class="ml-8 mt-6">
-                  {{ item.username }}
+                <router-link tag="div" v-bind:to="'/users/' + item.username" class="inline-block h-16 w-full" v-bind:activeClass="'bg-green-400 shadow-lg'">
+                <div class="mt-3 ml-1">
+                  <user-image class="inline" v-bind:identityId="item.identityId"/>
+                  <span class="font-hairline ml-2">{{ item.username }}</span>
                 </div>
                 </router-link>
               </div>
@@ -36,6 +36,7 @@
 <script>
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
+import UserImage from '../UserImage';
 
 const searchUsersQuery = `query searchUsers($username: String) {
   searchUsers(input: {username: $username}) {
@@ -64,6 +65,7 @@ export default {
 
   components: {
     ...components,
+    UserImage,
   },
 
   computed: {
