@@ -1,41 +1,25 @@
 <template>
-  <div class="home" v-if="hydrated">
-    <amplify-connect :query="getUser">
-      <template slot-scope="{loading, data, errors}">
+  <div v-if="hydrated" class="h-full py-12 pl-12 max-w-xl">
+    <amplify-connect :query="getUser" class="h-full bg-gray-100 rounded-md p-4 flex">
+      <template slot-scope="{loading, data, errors}" class="flex">
         <div v-if="loading">Loading...</div>
 
         <div v-else-if="errors.length > 0"></div>
-        <div v-else-if="data">
-          <h1>{{ data.getUser.username }}</h1>
-          <h3>Email: {{ data.getUser.email }}</h3>
-          <p>Last login: {{ data.getUser.lastLogin }}</p>
+
+        <div v-else-if="data" class="mx-auto">
+          <user-image class="h-64 w-64 inline rounded-full" v-bind:identityId="data.getUser.identityId"/>
+          <h1 class="text-center font-bold font-medium text-2xl leading-8">
+            {{ data.getUser.username }}
+          </h1>
+          <div class="leading-6 mt-2 text-center">
+            <h3>Email: {{ data.getUser.email }}</h3>
+            <chat-with-user v-if="username !== authUser.username" v-bind:username="username" />
+          </div>
+
+          <div v-if="username === authUser.username">
+            <amplify-photo-picker v-bind:photoPickerConfig="getphotoPickerConfig()"/>
+          </div>
         </div>
-        <div v-if="username === authUser.username">
-          <amplify-photo-picker v-bind:photoPickerConfig="getphotoPickerConfig()"/>
-        </div>
-
-
-        <amplify-connect  v-if="username !== authUser.username" :query="getChatPrivate">
-          <template slot-scope="{loading, data, errors}">
-            <div v-if="loading">Checking for chat...</div>
-
-            <div v-else-if="errors.length > 0"></div>
-            <div v-else-if="data">
-              <div v-if="hasPrivateChat(data)">
-                <router-link v-bind:to="'/chats/' + data.getChatPrivate.chatId">
-                  <button>Go to chat</button>
-                </router-link>
-              </div>
-              <div v-else>
-                <amplify-connect :mutation="createChat" @done="onCreateChatFinished">
-                  <template slot-scope="{ loading, mutate }">
-                    <button :disabled="loading" @click="mutate">Start chatting</button>
-                  </template>
-                </amplify-connect>
-              </div>
-            </div>
-          </template>
-        </amplify-connect>
       </template>
     </amplify-connect>
   </div>
@@ -44,26 +28,17 @@
 <script>
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
+import ChatWithUser from '../ChatWithUser';
+import UserImage from '../UserImage';
 
 const getUserQuery = `query getUser($username: String!) {
   getUser(input: {username: $username}) {
     username
     email
     lastLogin
+    identityId
   }
 }`;
-
-const getChatPrivateQuery = `query getChatPrivate($username: String!) {
-  getChatPrivate(input: {username: $username}) {
-    chatId
-  }
-}`;
-
-const createChatPrivateMutation = `mutation createChatPrivate($username: String!) {
-    createChatPrivate(input: { username: $username }) {
-      chatId
-    }
-  }`;
 
 export default {
   name: "user-page",
@@ -88,7 +63,9 @@ export default {
   props: ["username"],
 
   components: {
-    ...components
+    ...components,
+    ChatWithUser,
+    UserImage,
   },
 
   computed: {
@@ -97,26 +74,9 @@ export default {
         username: this.username
       });
     },
-    getChatPrivate() {
-      return this.$Amplify.graphqlOperation(getChatPrivateQuery, {
-        username: this.username
-      });
-    },
-    createChat() {
-      return this.$Amplify.graphqlOperation(createChatPrivateMutation, {
-        username: this.username
-      });
-    }
   },
 
   methods: {
-    onCreateChatFinished(mutationResponse) {
-      const chatId = mutationResponse.data.createChatPrivate.chatId;
-      this.$router.push(`/chats/${chatId}`);
-    },
-    hasPrivateChat(result) {
-      return result.getChatPrivate && result.getChatPrivate.chatId;
-    },
     getphotoPickerConfig() {
       return {
         header: 'Set user photo',

@@ -17,7 +17,7 @@
               <div class="bg-white shadow-xs mb-2 mx-px font-light text-base cursor-pointer hover:bg-green-300 active:bg-green-400">
                 <router-link tag="div" v-bind:to="'/users/' + item.username" class="inline-block h-16 w-full" v-bind:activeClass="'bg-green-400 shadow-lg'">
                 <div class="mt-3 ml-1">
-                  <user-image class="inline" v-bind:identityId="item.identityId"/>
+                  <user-image class="h-12 w-12 rounded-full inline" v-bind:identityId="item.identityId"/>
                   <span class="font-hairline ml-2">{{ item.username }}</span>
                 </div>
                 </router-link>
