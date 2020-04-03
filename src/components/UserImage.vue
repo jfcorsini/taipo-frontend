@@ -10,20 +10,30 @@ import { Storage } from "aws-amplify";
 
 export default {
   name: "user-image",
-  props: ["identityId"],
+  props: ["identityId", 'fullUrl'],
   data() {
     return {
       error: '',
-      url: null,
+      imageUrl: null,
     };
   },
 
   mounted() {
     this.getImage();
   },
+
+  computed: {
+    url() {
+      return this.fullUrl || this.imageUrl;
+    }
+  },
   
   methods: {
     async getImage() {
+      if (this.fullUrl) {
+        return;
+      }
+
       if (!this.identityId) {
         return this.setError('IdentityId not provided')
       }
@@ -33,7 +43,7 @@ export default {
           level: 'protected',
           identityId: this.identityId
         })
-        this.url = result;
+        this.imageUrl = result;
       } catch (error) {
         this.setError(error);
       }

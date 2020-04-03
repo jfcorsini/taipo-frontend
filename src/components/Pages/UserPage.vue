@@ -7,7 +7,7 @@
         <div v-else-if="errors.length > 0"></div>
 
         <div v-else-if="data" class="mx-auto">
-          <user-image class="h-64 w-64 inline rounded-full" v-bind:identityId="data.getUser.identityId"/>
+          <user-image class="h-64 w-64 inline rounded-full" v-bind:identityId="data.getUser.identityId" :fullUrl="imageUrl"/>
           <h1 class="text-center font-bold font-medium text-2xl leading-8">
             {{ data.getUser.username }}
           </h1>
@@ -17,7 +17,14 @@
           </div>
 
           <div v-if="username === authUser.username">
-            <amplify-photo-picker v-bind:photoPickerConfig="getphotoPickerConfig()"/>
+            <input
+              ref="file_input"  
+              type="file"
+              accept="image/*"
+              @change="loadInputImage"
+            />
+            <br>
+            <button class="ml-4 bg-green-400 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" v-if="file" v-on:click="uploadImage" :disabled="!file">Upload photo</button>
           </div>
         </div>
       </template>
@@ -26,7 +33,7 @@
 </template>
 
 <script>
-import { Auth } from "aws-amplify";
+import { Auth, Storage } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 import ChatWithUser from '../ChatWithUser';
 import UserImage from '../UserImage';
@@ -52,11 +59,12 @@ export default {
   data() {
     return {
       hydrated: false,
-      photoPickerConfig: {
-        header: 'Set user photo',
-        defaultName: this.username,
-        path: this.authUser && `users/${this.authUser.attributes.sub}`,
-      }
+      imageUrl: null,
+      file: null,
+      storageOptions: {
+        level: 'protected'
+      },
+      error: '',
     };
   },
 
@@ -77,15 +85,36 @@ export default {
   },
 
   methods: {
-    getphotoPickerConfig() {
-      return {
-        header: 'Set user photo',
-        defaultName: 'profile',
-        path: 'images/',
-        storageOptions: {
-          level: 'protected'
-        }
-      };
+    loadInputImage(evt) {
+      this.file = evt.target.files[0];
+      if (!this.file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const target = e.target;
+        const url  = target.result;
+        this.imageUrl = url;
+      }
+      reader.readAsDataURL(this.file);
+    },
+    uploadImage() {
+      Storage.put(
+        'images/profile',
+        this.file, 
+        this.storageOptions,
+      )
+      .then((result) => {
+        this.completeFileUpload(result.key)
+      })
+      .catch(e => this.setError(e));
+    },
+    completeFileUpload() {
+      this.file = null;
+    },
+    setError: function(e) {
+      this.error = e.message || e;
     }
   }
 };
