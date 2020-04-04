@@ -24,7 +24,7 @@
               @change="loadInputImage"
             />
             <br>
-            <button class="ml-4 bg-green-400 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" v-if="file" v-on:click="uploadImage" :disabled="!file">Upload photo</button>
+            <button class="ml-4 bg-green-400 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" v-if="file" v-on:click="uploadImage" :disabled="!file">{{uploadText}}</button>
           </div>
         </div>
       </template>
@@ -56,6 +56,10 @@ export default {
     this.hydrated = true;
   },
 
+  async updated() {
+    this.imageUrl = null;
+  },
+
   data() {
     return {
       hydrated: false,
@@ -65,6 +69,7 @@ export default {
         level: 'protected'
       },
       error: '',
+      uploadText: 'Upload photo'
     };
   },
 
@@ -100,6 +105,7 @@ export default {
       reader.readAsDataURL(this.file);
     },
     uploadImage() {
+      this.uploadText = 'Uploading...'
       Storage.put(
         'images/profile',
         this.file, 
@@ -108,7 +114,10 @@ export default {
       .then((result) => {
         this.completeFileUpload(result.key)
       })
-      .catch(e => this.setError(e));
+      .catch(e => this.setError(e))
+      .finally(() => {
+        this.uploadText = 'Upload photo'
+      })
     },
     completeFileUpload() {
       this.file = null;
