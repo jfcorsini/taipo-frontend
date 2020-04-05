@@ -24,7 +24,9 @@
               @change="loadInputImage"
             />
             <br>
-            <button class="ml-4 bg-green-400 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" v-if="file" v-on:click="uploadImage" :disabled="!file">{{uploadText}}</button>
+            <button class="ml-4 bg-green-400 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" v-bind:class="{ 'opacity-50 cursor-not-allowed': uploadingImage }" v-if="file" v-on:click="uploadImage" :disabled="!file"
+              >Upload photo
+            </button>
           </div>
         </div>
       </template>
@@ -35,6 +37,7 @@
 <script>
 import { Auth, Storage } from "aws-amplify";
 import { components } from "aws-amplify-vue";
+import NProgress from 'nprogress';
 import ChatWithUser from '../ChatWithUser';
 import UserImage from '../UserImage';
 
@@ -65,11 +68,8 @@ export default {
       hydrated: false,
       imageUrl: null,
       file: null,
-      storageOptions: {
-        level: 'protected'
-      },
       error: '',
-      uploadText: 'Upload photo'
+      uploadingImage: false,
     };
   },
 
@@ -105,18 +105,29 @@ export default {
       reader.readAsDataURL(this.file);
     },
     uploadImage() {
-      this.uploadText = 'Uploading...'
+      if (this.uploadingImage) {
+        return;
+      }
+
+      this.uploadingImage = true;
+      NProgress.start();
       Storage.put(
         'images/profile',
         this.file, 
-        this.storageOptions,
+        {
+          level: 'protected',
+          progressCallback: (progress) => {
+            NProgress.set(progress.loaded/progress.total);
+          }
+        }
       )
       .then((result) => {
         this.completeFileUpload(result.key)
       })
       .catch(e => this.setError(e))
       .finally(() => {
-        this.uploadText = 'Upload photo'
+        NProgress.done();
+        this.uploadingImage = false;
       })
     },
     completeFileUpload() {
