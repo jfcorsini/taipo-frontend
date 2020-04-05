@@ -18,7 +18,7 @@
 
           <div v-if="username === authUser.username">
             <input
-              ref="file_input"  
+              class="w-64"
               type="file"
               accept="image/*"
               @change="loadInputImage"
