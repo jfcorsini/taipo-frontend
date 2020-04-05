@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
+import NProgress from 'nprogress';
 
 import Home from '../components/Pages/Home'
 import ChatPage from '../components/Pages/ChatPage'
@@ -33,6 +34,7 @@ const router = new VueRouter({
 })
 
 router.beforeResolve((to, from, next) => {
+  NProgress.start();
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // let user;
     Vue.prototype.$Amplify.Auth.currentAuthenticatedUser().then(data => {
@@ -47,6 +49,10 @@ router.beforeResolve((to, from, next) => {
     });
   }
   next()
-})
+});
+
+router.afterEach(() => {
+  NProgress.done();
+});
 
 export default router
