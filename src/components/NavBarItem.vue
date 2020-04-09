@@ -1,6 +1,6 @@
 <template>
-  <router-link class="nav-item" tag="p" :to="to">
-    <a class="nav-link">
+  <router-link tag="p" :to="to">
+    <a>
       <font-awesome-icon :icon="icon" /> {{ name }}
     </a>
   </router-link>

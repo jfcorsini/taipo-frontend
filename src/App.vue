@@ -61,25 +61,7 @@ export default {
 
 
 <style lang="scss">
-#page {
-  display: flex;
-}
-
 #main {
   height: 80vh;
-}
-
-#side-bar {
-  border-radius: 10px 10px 0 0;
-  width: 300px;
-  height: 100%;
-}
-
-#main-window {
-  background-color: $color2-light;
-  border-radius: 0 10px 10px 0;
-
-  display: flex;
-  flex-grow: 1;
 }
 </style>
