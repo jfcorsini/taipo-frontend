@@ -3,7 +3,6 @@ import Vue from 'vue'
 import NProgress from 'nprogress';
 
 import Home from '../components/Pages/Home'
-import ChatPage from '../components/Pages/ChatPage'
 import ChatsPage from '../components/Pages/ChatsPage'
 import UsersPage from '../components/Pages/UsersPage'
 import UserPage from '../components/Pages/UserPage'
@@ -20,13 +19,7 @@ const routes = [
     },
   ]},
   
-  { path: '/chats', component: ChatsPage, meta: { requiresAuth: true}, children: [
-    {
-      path: '/chats/:chatId',
-      component: ChatPage,
-      props: true,
-    },
-  ] },
+  { path: '/chats/:chatId?', component: ChatsPage, meta: { requiresAuth: true}, props: true },
 ]
 
 const router = new VueRouter({
