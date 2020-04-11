@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="w-9/12">
-      <div v-if="chatId && !loading" class="h-full overflow-x-hidden overflow-y-auto flex justify-between">
+      <div v-if="chat && !loading" class="h-full overflow-x-hidden overflow-y-auto flex justify-between">
         <div class="w-full flex flex-col justify-center align-bottom">
           <div v-if="!chat.private">
             <h1 class="font-light text-3xl text-center leading-8">
@@ -117,7 +117,6 @@ export default {
   },
 
   watch: {
-    // whenever usernameFilter changes, this function will run
     chatId: async function() {
       await this.getChatConfig();
       await this.getChatMembers();
@@ -153,8 +152,6 @@ export default {
       const response = await API.graphql(
         graphqlOperation(listSelfChatMembersQuery)
       );
-      // eslint-disable-next-line no-console
-      console.log(response);
 
       this.chatIds = response.data.listSelfChatMembers.map(i => i.chatId);
     },
