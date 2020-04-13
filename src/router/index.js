@@ -5,20 +5,12 @@ import NProgress from 'nprogress';
 import Home from '../components/Pages/Home'
 import ChatsPage from '../components/Pages/ChatsPage'
 import UsersPage from '../components/Pages/UsersPage'
-import UserPage from '../components/Pages/UserPage'
 import AuthPage from '../components/Pages/AuthPage'
 
 const routes = [
-  { path: '/', component: Home, meta: { requiresAuth: true}},
   { path: '/auth', component: AuthPage },
-  { path: '/users', component: UsersPage, meta: { requiresAuth: true}, children: [
-    {
-      path: '/users/:username',
-      component: UserPage,
-      props: true,
-    },
-  ]},
-  
+  { path: '/', component: Home, meta: { requiresAuth: true}},
+  { path: '/users/:username?', component: UsersPage, meta: { requiresAuth: true}, props: true },
   { path: '/chats/:chatId?', component: ChatsPage, meta: { requiresAuth: true}, props: true },
 ]
 
