@@ -1,10 +1,17 @@
 <template>
-  <div class="flex justify-around items-center bg-orange-200 h-8 rounded rounded-b-none">
-    <nav-bar-item name="Home" to="/" icon="home"/>
-    <nav-bar-item name="Chats" to="/chats" icon="comments"/>
-    <nav-bar-item name="Users" to="/users" icon="users"/>
-    <div v-if="signedIn" @click="signOut">
-      <nav-bar-item name="Sign Out" to="/#" icon="sign-out-alt"/>
+  <div class="flex flex-col justify-between items-center bg-white rounded rounded-r-none w-24">
+    <div>
+      <nav-bar-item to="home" icon="home"/>
+    </div>
+    <div class="justify-around">
+      <nav-bar-item to="chats" icon="comments"/>
+      <nav-bar-item to="users" icon="users"/>
+      <nav-bar-item to="notifications" icon="bell"/>
+    </div>
+    <div>
+      <div v-if="signedIn" @click="signOut">
+        <nav-bar-item  to="auth" icon="sign-out-alt"/>
+      </div>
     </div>
   </div>
 </template>
@@ -55,25 +62,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-#nav {
-  display: flex;
-  justify-content: space-between;
-
-  align-items: center;
-
-  background-color: $color1-lighter;
-
-  border-radius: 10px 0 0 0;
-  a {
-    font-size: 18px;
-    color: #fff;
-    text-decoration: none;
-
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-}
-</style>

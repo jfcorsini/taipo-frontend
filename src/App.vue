@@ -1,13 +1,15 @@
 <template>
-  <div class="h-screen flex justify-center items-center bg-gray-100">
+  <div class="h-screen flex justify-center items-center bg-gray-200">
     <div v-if="!signedIn">
         <router-view></router-view>
     </div>
     <div v-else class="w-10/12 border border-gray-700 shadow shadow-xl rounded-md">
-        <nav-bar/>
-        <div id="main" class="bg-gray-200">
-            <router-view></router-view>
+      <div class="bg-white py-2 pr-2 rounded-lg">
+        <div id="main" class="bg-gray-200 flex h-screen">
+            <nav-bar class="flex-grow-0"/>
+            <router-view class="flex-grow"></router-view>
         </div>
+      </div>
     </div>
   </div>
 </template>

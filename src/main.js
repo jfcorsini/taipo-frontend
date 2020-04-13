@@ -11,7 +11,7 @@ import router from './router'
 import config from './config'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHome, faComments, faUsers, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faComments, faUsers, faSignOutAlt, faBell } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import './assets/scss/tailwind.scss';
@@ -20,6 +20,7 @@ library.add(faHome)
 library.add(faComments)
 library.add(faUsers)
 library.add(faSignOutAlt)
+library.add(faBell)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
