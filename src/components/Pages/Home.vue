@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex">
     <div id="local-media"></div>
     <div id="remote-media-div"></div>
   </div>
@@ -11,11 +11,6 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { connect, createLocalVideoTrack } from 'twilio-video';
 
-createLocalVideoTrack().then(track => {
-  const localMediaContainer = document.getElementById('local-media');
-  localMediaContainer.appendChild(track.attach());
-});
-
 const getTwilioToken = `query getTwilioToken($roomName: String!) {
   getTwilioToken(input: { roomName: $roomName }) {
     username
@@ -23,6 +18,37 @@ const getTwilioToken = `query getTwilioToken($roomName: String!) {
   }
 }`;
 
+const connectParticipant = (participant) => {
+  console.log('Participant "%s" connected', participant.identity);
+
+  const div = document.createElement('div');
+  div.id = participant.sid;
+  div.innerText = participant.identity;
+
+  participant.on('trackSubscribed', track => trackSubscribed(div, track));
+  participant.on('trackUnsubscribed', trackUnsubscribed);
+
+  participant.tracks.forEach(publication => {
+    if (publication.isSubscribed) {
+      trackSubscribed(div, publication.track);
+    }
+  });
+
+  document.getElementById('remote-media-div').appendChild(div);
+}
+
+const trackSubscribed = (div, track) => {
+  div.appendChild(track.attach());
+}
+
+const trackUnsubscribed = (track) => {
+  track.detach().forEach(element => element.remove());
+}
+
+const participantDisconnected = (participant) => {
+  console.log('Participant "%s" disconnected', participant.identity);
+  document.getElementById(participant.sid).remove();
+}
 
 export default {
   name: "home",
@@ -34,9 +60,10 @@ export default {
       graphqlOperation(getTwilioToken, { roomName: 'home' })
     );
 
-    const { token, username } = response.data.getTwilioToken;
-    console.log('Token', token);
-    console.log('Username', username);
+    const track = await createLocalVideoTrack();
+    document.getElementById('local-media').appendChild(track.attach());
+
+    const { token } = response.data.getTwilioToken;
 
     connect(token, { name:'home', audio: true, video: { width: 640 } }).then(room => {
       console.log(`Successfully joined a Room: ${room}`);
@@ -44,37 +71,11 @@ export default {
       const localParticipant = room.localParticipant;
       console.log(`Connected to the Room as LocalParticipant "${localParticipant.identity}"`);
 
-      // Log any Participants already connected to the Room
-      room.participants.forEach(participant => {
-        console.log(`Participant "${participant.identity}" is connected to the Room`);
-      });
+      room.participants.forEach(connectParticipant);
+      room.on('participantConnected', connectParticipant);
 
-      room.once('participantConnected', participant => {
-        console.log(`Participant "${participant.identity}" has connected to the Room`);
-      });
-
-      room.once('participantDisconnected', participant => {
-        console.log(`Participant "${participant.identity}" has disconnected from the Room`);
-      })
-
-      room.on('participantConnected', participant => {
-        console.log(`Participant "${participant.identity}" connected`);
-
-        participant.tracks.forEach(publication => {
-          if (publication.isSubscribed) {
-            const track = publication.track;
-            document.getElementById('remote-media-div').appendChild(track.attach());
-          }
-        });
-
-        participant.on('trackSubscribed', track => {
-          document.getElementById('remote-media-div').appendChild(track.attach());
-        });
-      });
-
-      room.on('participantDisconnected', participant => {
-        console.log(`Participant disconnected: ${participant.identity}`);
-      });
+      room.on('participantDisconnected', participantDisconnected);
+      room.once('disconnected', () => room.participants.forEach(participantDisconnected));
     }, error => {
       console.error(`Unable to connect to Room: ${error.message}`);
     });
