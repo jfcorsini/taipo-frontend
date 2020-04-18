@@ -17,13 +17,16 @@
         <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
           Password
         </label>
-        <input v-model="form.password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password">
+        <input v-model="form.password" v-on:keyup.enter="signUp" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password">
       </div>
       <div class="text-center">
         <button v-on:click="signUp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
           Sign Up
         </button>
       </div>
+      <p v-if="error" class="text-sm mt-2 text-red-600">
+        {{ error }}
+      </p>
     </form>
     <form v-if="formState === 'confirmSignUp'">
       <div class="mb-4">
@@ -43,12 +46,14 @@
 
 <script>
 import { Auth } from "aws-amplify";
+import NProgress from 'nprogress';
 
 export default {
-  name: "home",
+  name: "sign-up",
   props: ["toggle"],
   data() {
     return {
+      error: null,
       formState: "signUp",
       form: {
         username: "",
@@ -61,12 +66,19 @@ export default {
   methods: {
     async signUp() {
       const { username, password, email } = this.form;
-      await Auth.signUp({
-        username,
-        password,
-        attributes: { email }
-      });
-      this.formState = "confirmSignUp";
+      NProgress.start();
+      try {
+        await Auth.signUp({
+          username,
+          password,
+          attributes: { email }
+        });
+        this.formState = "confirmSignUp";
+      } catch (error) {
+        this.error = error.message;
+      } finally {
+        NProgress.done();
+      }
     },
     async confirmSignUp() {
       const { username, authCode } = this.form;

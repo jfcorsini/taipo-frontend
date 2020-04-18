@@ -8,8 +8,8 @@ import UsersPage from '../components/Pages/UsersPage'
 import AuthPage from '../components/Pages/AuthPage'
 
 const routes = [
-  { path: '/auth', name: 'auth', component: AuthPage },
   { path: '/', component: Home, name: 'home', meta: { requiresAuth: true}},
+  { path: '/auth', name: 'auth', component: AuthPage },
   { path: '/users/:username?', component: UsersPage, name:'users', meta: { requiresAuth: true}, props: true },
   { path: '/chats/:chatId?', component: ChatsPage, name:'chats', meta: { requiresAuth: true}, props: true },
   { path: '/notifications', component: Home, name: 'notifications', meta: { requiresAuth: true}},
