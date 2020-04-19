@@ -1,5 +1,6 @@
 <template>
     <img
+      class="object-cover object-center"
       :src="url"
     />
 </template>
