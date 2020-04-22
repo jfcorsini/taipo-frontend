@@ -1,38 +1,31 @@
 <template>
-  <div class="h-full flex flex-col mr-2">
-    <div class="overflow-y-auto" v-if="hydrated">
-      <amplify-connect
-        :query="listChatMessagesQuery"
-        :subscription="createMessageSubscription"
-        :onSubscriptionMsg="onCreateMessage"
-      >
-        <template slot-scope="{loading, data, errors}">
-          <div v-if="loading">Loading...</div>
+  <amplify-connect
+    class="flex flex-col mr-2 overflow-y-auto" v-if="hydrated"
+    :query="listChatMessagesQuery"
+    :subscription="createMessageSubscription"
+    :onSubscriptionMsg="onCreateMessage">
+    <template slot-scope="{loading, data, errors}">
+      <div v-if="loading">Loading...</div>
 
-          <div v-else-if="errors.length > 0"></div>
-          <div v-else-if="data">
-            <div v-for="item in data.listMessages" v-bind:key="item.messageId">
-              <chat-message
-                v-bind:username="item.username"
-                v-bind:message="item.message"
-                v-bind:isPrivate="isPrivate"
-                v-bind:isSender=isSenderMessage(item)
-              />
-            </div>
-          </div>
-        </template>
-      </amplify-connect>
-    </div>
-
-    <chat-send-message/>
-  </div>
+      <div v-else-if="errors.length > 0"></div>
+      <div v-else-if="data">
+        <div v-for="item in data.listMessages" v-bind:key="item.messageId">
+          <chat-message
+            v-bind:username="item.username"
+            v-bind:message="item.message"
+            v-bind:isPrivate="isPrivate"
+            v-bind:isSender=isSenderMessage(item)
+          />
+        </div>
+      </div>
+    </template>
+  </amplify-connect>
 </template>
 
 <script>
 import { Auth } from "aws-amplify";
 import { components } from "aws-amplify-vue";
 import ChatMessage from './ChatMessage';
-import ChatSendMessage from './ChatSendMessage';
 
 const listChatMessagesQuery = `query listMessages($chatId: String!) {
   listMessages(input: {chatId: $chatId}) {
@@ -76,7 +69,6 @@ export default {
   components: {
     ...components,
     ChatMessage,
-    ChatSendMessage,
   },
 
   props: ['isPrivate'],

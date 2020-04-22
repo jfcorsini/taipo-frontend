@@ -19,7 +19,7 @@
     </div>
     <div class="w-9/12">
       <div v-if="chat && !loading" class="h-full overflow-x-hidden overflow-y-auto flex justify-between">
-        <div class="w-full flex flex-col justify-center align-bottom">
+        <div class="w-full flex flex-col justify-between align-middle">
           <div v-if="!chat.private">
             <h1 class="font-light text-3xl text-center leading-8">
               {{ chat.chatName }}
@@ -32,6 +32,7 @@
             </h1>
           </div>
           <chat v-bind:isPrivate="chat.private"/>
+          <chat-send-message class="mt-auto"/>
         </div>
 
         <transition name="slide-fade">
@@ -51,6 +52,7 @@
 <script>
 import { API, graphqlOperation } from "aws-amplify";
 import ChatElement from "../ChatElement";
+import ChatSendMessage from '../ChatSendMessage';
 import Chat from "../Chat";
 import AddUsersList from "../AddUsersList";
 import { components } from "aws-amplify-vue";
@@ -129,7 +131,8 @@ export default {
     ...components,
     ChatElement,
     Chat,
-    AddUsersList
+    AddUsersList,
+    ChatSendMessage,
   },
 
   computed: {
